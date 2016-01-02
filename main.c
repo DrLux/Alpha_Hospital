@@ -1,5 +1,5 @@
 int main(){
 	int notepad;
-	notepad++;
+	notepad--;
 	return 0;
 }
