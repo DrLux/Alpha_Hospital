@@ -125,6 +125,7 @@ void triage(){
     //setMessage(msgid, &msg, IPC_NOWAIT);
 }
 
+
 /*
 Chirurgia
 Oncologia
