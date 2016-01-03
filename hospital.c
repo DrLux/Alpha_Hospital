@@ -40,24 +40,3 @@ int main(int argc, char* argv[]){
         destroySem(semid);
 }
 
-void triage(){
-	int msgid = createCodeMessage(KEY);
-	struct paziente msg;
-	msg.malattia = (char *) malloc(5 * sizeof(char));
-	stpcpy(msg.malattia , "lupus");
-	msg.gravita = 8;
-	msg.reparto = 2;
-	//setMessage(msgid, &msg, IPC_NOWAIT);
-}
-
-/*
-Chirurgia
-Oncologia
-Pediatria
-Dermatologia
-Cardiologia
-Radiografia
-Pronto Soccorso
-Oculistica 
-Cardiologia
-*/

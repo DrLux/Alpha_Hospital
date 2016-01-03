@@ -32,6 +32,8 @@ struct paziente {
  int reparto; /* Reparto associato alla specifica malattia */
 }; 
 
+
+
 // Crea una coda di messaggi con la key passata come parametro
 int createCodeMessage (int key){
 	int msgid; 
@@ -113,5 +115,26 @@ void semRelease(int semid, int semnum){
         }
 }
 
+void triage(){
+    int msgid = createCodeMessage(KEY);
+    struct paziente msg;
+    msg.malattia = (char *) malloc(5 * sizeof(char));
+    stpcpy(msg.malattia , "lupus");
+    msg.gravita = 8;
+    msg.reparto = 2;
+    //setMessage(msgid, &msg, IPC_NOWAIT);
+}
+
+/*
+Chirurgia
+Oncologia
+Pediatria
+Dermatologia
+Cardiologia
+Radiografia
+Pronto Soccorso
+Oculistica 
+Cardiologia
+*/
 
 
