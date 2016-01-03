@@ -20,8 +20,8 @@ void semRelease(int semid, int semnum);
 
 
 void triage();
-//void getMessage(int msgid, struct ddqueue *msg, long msgtype);
-//void setMessage(int msgid, struct ddqueue *msg, long msgtype);
+void getMessage(int msgid, struct paziente *msg, long msgtype);
+void setMessage(int msgid, struct paziente *msg, long msgtype);
 int createCodeMessage (int key);
 
 
@@ -43,15 +43,15 @@ int createCodeMessage (int key){
 	return msgid;
 }
 
-/*// Scrivo messaggi in coda
-void setMessage(int msgid, struct ddqueue *msg, long msgtype){
+// Scrivo messaggi in coda
+void setMessage(int msgid, struct paziente msg, long msgtype){
 	if( msgsnd(msgid, &msg, sizeof(msg), IPC_NOWAIT) == -1) 
 		printf("\nmsgsnd error");	 
 		exit(EXIT_FAILURE);
-}*/	
+}
 	
-/*// Ottengo messaggi in base al tipo -------------> DA FINIRE
-void getMessage(int msgid, struct ddqueue *msg, long msgtype) {
+// Ottengo messaggi in base al tipo -------------> DA FINIRE
+void getMessage(int msgid, struct paziente *msg, long msgtype) {
         if (msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) == -1) { 
                 printf("None message with type %ld\n", msgtype);
 				exit(EXIT_FAILURE);
@@ -60,7 +60,7 @@ void getMessage(int msgid, struct ddqueue *msg, long msgtype) {
                 //printf("Contenuto: \"%s\"\n", (*msg).mtext);
                 //fflush(stdout);
         }
-}*/
+}
 
 
 
