@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include "hospital.h"
+#include "config.h"
 
 #define DEFAULT_PAZIENTI 10
 #define DEFAULT_REPARTI 2
