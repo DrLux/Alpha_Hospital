@@ -9,12 +9,15 @@
 #include <errno.h>
 #include "hospital.h"
 #include "config.h"
+#include "generatorePazienti.h"
+#include "cartellaPaziente.h"
 
 #define DEFAULT_PAZIENTI 10
 #define DEFAULT_REPARTI 2
 #define DEFAULT_TEMPO 20
 
 #define KEY 0xfaceb00c
+#define PERMESSI 0600
 
 
 
@@ -31,9 +34,10 @@ int main(int argc, char* argv[]){
 
         int semid = createSem(KEY, 1);
 
-        initSem(semid, 0, 10);
+        initSem(semid, 0, numPazienti);
 
-        triage();
+		GeneratorePazienti(numPazienti,maxTempo, KEY ,PERMESSI);
+        //triage();
 		
 
 		
