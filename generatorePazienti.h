@@ -10,7 +10,7 @@ void getMessage(int msgid, struct paziente *msg, long msgtype);
 void setMessage(int msgid, struct paziente *msg, long msgtype);
 
 void GeneratorePazienti(int totPazienti , int tempo , int key , int permessi);
-void malattiaPaziente(struct paziente *msg);
+void malattiaPaziente(struct paziente *msg );
 
 // Crea una coda di messaggi con la key passata come parametro
 int createCodeMessage(int key , int permessi){
@@ -46,7 +46,6 @@ void GeneratorePazienti(int totPazienti , int tempo , int key , int permessi){
 	int childPid = 1;
 	int msgid = createCodeMessage(key , permessi);
 	struct paziente msg;
-	//questo for deve diventare la funzione isChild
 	for (totPazienti ; totPazienti > 0 && childPid != 0 ; totPazienti--) // vogliamo che solo il padre continui a ciclare
 		childPid = fork(); // il childPid dei figli verrà settato a 0 e usciranno dal ciclo
 		
@@ -57,15 +56,14 @@ void GeneratorePazienti(int totPazienti , int tempo , int key , int permessi){
 		}		
 		
 		case 0:{
-			malattiaPaziente(&msg);
-			printf("\nSono il figlio numero %d ed il mio Messaggio e': %s \n", getpid(), msg.malattia);
+			malattiaPaziente(&msg); //riempie la struttura dati paziente
+			printf("\nSono il figlio numero %d ed il mio Messaggio e': %s \n", getpid() , msg.malattia);
 			setMessage(msgid, &msg , 0);
 			exit(0);
 		break;
 		}
 		
 		default:{
-			//solo temporaneo poi verra gestita con un handler e sigalarm
 			sleep(tempo);
 			printf("\nSono il padre e il mio id e' %d" , getpid());
 			printf("\nTempo scaduto!"); // questo è un controllo fittizio di test PROVVISORIO, in realta il tempo si gestisce con un handler
@@ -80,8 +78,7 @@ void GeneratorePazienti(int totPazienti , int tempo , int key , int permessi){
 				printf("Errore wait"); 													
 				
 		printf("\nOra che tutti i figli sono morti continuo a vivere la mia vita in santa pace, sono il padre\n");
-		//questa è per il cortocircuito
-		/*if (msgctl(msgid, IPC_RMID, &msg) == -1) { 
+		/*if (msgctl(msgid, IPC_RMID, &msg) == -1) {
                 printf("\nFailure in msgctl(IPC_RMID)\n");
 				exit(EXIT_FAILURE);
         } else {
