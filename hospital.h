@@ -1,5 +1,4 @@
 typedef enum {false, true} bool; 
-
 // non compila su mac
 #if defined(__linux__)
 union semun {
@@ -18,50 +17,7 @@ void initSem(int semid, int semnum, int val);
 void semReserve(int semid, int semnum);
 void semRelease(int semid, int semnum);
 
-
 void triage();
-void getMessage(int msgid, struct paziente *msg, long msgtype);
-void setMessage(int msgid, struct paziente *msg, long msgtype);
-int createCodeMessage (int key);
-
-
-//struttura che definisce il paziente nella coda nel triage
-struct paziente {
- char *malattia; /* Nome della malattia */
- int gravita; /* Indice (da 1 a 10) di gravita della malattia del paziente */
- int reparto; /* Reparto associato alla specifica malattia */
-}; 
-
-
-
-// Crea una coda di messaggi con la key passata come parametro
-int createCodeMessage (int key){
-	int msgid; 
-	if ((msgid = msgget( key, 0600 | IPC_CREAT | IPC_EXCL)) < 0)
-		printf("Error msgget\n");
-                exit(EXIT_FAILURE);
-	return msgid;
-}
-
-// Scrivo messaggi in coda
-void setMessage(int msgid, struct paziente msg, long msgtype){
-	if( msgsnd(msgid, &msg, sizeof(msg), IPC_NOWAIT) == -1) 
-		printf("\nmsgsnd error");	 
-		exit(EXIT_FAILURE);
-}
-	
-// Ottengo messaggi in base al tipo -------------> DA FINIRE
-void getMessage(int msgid, struct paziente *msg, long msgtype) {
-        if (msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) == -1) { 
-                printf("None message with type %ld\n", msgtype);
-				exit(EXIT_FAILURE);
-        } else {
-                //(*msg).mtext[63] = '\0';
-                //printf("Contenuto: \"%s\"\n", (*msg).mtext);
-                //fflush(stdout);
-        }
-}
-
 
 
 int createSem(int key, int num){ //genera "num" semafori aventi la stessa key passata come parametro
@@ -115,7 +71,7 @@ void semRelease(int semid, int semnum){
         }
 }
 
-void triage(){
+/*void triage(){
     int msgid = createCodeMessage(KEY);
     struct paziente msg;
     msg.malattia = (char *) malloc(5 * sizeof(char));
@@ -123,19 +79,8 @@ void triage(){
     msg.gravita = 8;
     msg.reparto = 2;
     //setMessage(msgid, &msg, IPC_NOWAIT);
-}
+}*/
 
 
-/*
-Chirurgia
-Oncologia
-Pediatria
-Dermatologia
-Cardiologia
-Radiografia
-Pronto Soccorso
-Oculistica 
-Cardiologia
-*/
 
 
