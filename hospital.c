@@ -9,8 +9,8 @@
 #include <errno.h>
 #include "hospital.h"
 #include "config.h"
-#include "generatorePazienti.h"
-#include "cartellaPaziente.h"
+//#include "generatorePazienti.h"
+//#include "cartellaPaziente.h"
 
 #define DEFAULT_PAZIENTI 10
 #define DEFAULT_REPARTI 2
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]){
 
         initSem(semid, 0, numPazienti);
 
-		GeneratorePazienti(numPazienti,maxTempo, KEY ,PERMESSI);
+	//GeneratorePazienti(numPazienti,maxTempo, KEY ,PERMESSI);
         //triage();
 		
 
