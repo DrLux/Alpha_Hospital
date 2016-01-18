@@ -27,7 +27,7 @@ void loadMalattia(struct paziente *msg , int numRand){
 			(*msg).malattia = strsep(&malattiaData, ",");
 			strsep(&malattiaData, "\n");
 		}       
-	//free(malattiaData); NON FUNZIONA LA FREEE OCCHIO!!! da sistemare
+	//free(malattiaData); //NON FUNZIONA LA FREEE OCCHIO!!! da sistemare
     } else {
         printf("Problemi nella lettura di malattie.txt \n");
     }

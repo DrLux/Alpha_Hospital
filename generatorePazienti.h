@@ -30,15 +30,14 @@ void setMessage(int msgid, struct paziente *msg, long msgtype){
 	} 
 }
 	
-// Ottengo messaggi in base al tipo -------------> DA FINIRE
+// Ottengo messaggi in base al tipo -------------> DA FINIRE --> non la chiama ancora nessuno per ora
 void getMessage(int msgid, struct paziente *msg, long msgtype){
         if (msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) == -1) { 
                 printf("None message with type %ld\n", msgtype);
 				exit(EXIT_FAILURE);
         } else {
-                //(*msg).mtext[63] = '\0';
-                //printf("Contenuto: \"%s\"\n", (*msg).mtext);
-                //fflush(stdout);
+                printf("Contenuto: %s \n", (*msg).malattia);
+                fflush(stdout);
         }
 }
 
@@ -58,30 +57,31 @@ void GeneratorePazienti(int totPazienti , int tempo , int key , int permessi){
 		case 0:{
 			malattiaPaziente(&msg); //riempie la struttura dati paziente
 			printf("\nSono il figlio numero %d ed il mio Messaggio e': %s \n", getpid() , msg.malattia);
-			setMessage(msgid, &msg , 0);
+			setMessage(msgid, &msg, 0);
 			exit(0);
 		break;
 		}
 		
 		default:{
-			sleep(tempo);
-			printf("\nSono il padre e il mio id e' %d" , getpid());
-			printf("\nTempo scaduto!"); // questo è un controllo fittizio di test PROVVISORIO, in realta il tempo si gestisce con un handler
+			sleep(tempo); // questo è un controllo fittizio di test PROVVISORIO, in realta il tempo si gestisce con un handler
+			getMessage(msgid, &msg, 0);
+			printf("\nTempo scaduto!");
+			printf("\nSono il padre e il mio id e' %d\n" , getpid());
 		break;
 		}
 	}	
 	
-	//test 
+	// routine di test 
 		while (wait(NULL) != -1)
 			continue;
 		if (errno != ECHILD) // errore vero
 				printf("Errore wait"); 													
 				
-		printf("\nOra che tutti i figli sono morti continuo a vivere la mia vita in santa pace, sono il padre\n");
-		/*if (msgctl(msgid, IPC_RMID, &msg) == -1) {
+
+		if (msgctl(msgid, IPC_RMID, NULL) == -1) { //elimina la coda di messaggi CORTOCIRCUITO
                 printf("\nFailure in msgctl(IPC_RMID)\n");
 				exit(EXIT_FAILURE);
         } else {
                 printf("Coda di pazienti eliminata\n");
-        }*/
+        }
 }
