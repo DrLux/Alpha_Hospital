@@ -18,7 +18,7 @@ void loadMalattia(char *sintomo, int numRand){
 		char* malattia = malattiaData;
 		for (i=0; i < numRand; i++) {
 			sintomo = strsep(&malattia, ",");
-			printf("debug sintomo %s Lunghezza sintomo %d \n", sintomo, (int)strlen(sintomo));//questo è per accertarmi che funzioni effettivamente. Il vero comando è quello che spara nella queue
+			printf("\nDebug sintomo %s Lunghezza sintomo %d \n", sintomo, (int)strlen(sintomo));//questo è per accertarmi che funzioni effettivamente. Il vero comando è quello che spara nella queue
 			//sendMessage(msgqIDgp2tri, sintomo, (int)strlen(sintomo));
 			strsep(&malattia, "\n");			
 		}       
@@ -43,19 +43,3 @@ int contaRighe(char *path){
 	fclose(fp);
 	return riga;
 }
-
-
-//genera un numero randomico entro un certo range di valori
-int getRand(int min , int max){
-	srand(getpid()+ min + max);
-	int rand = 0;
-	while ( rand < min || rand > max)
-		rand = randomNumber();
-	return rand;
-}
-
-//genera un numero randomicamente
-int randomNumber(){
-  return rand()%10; //se lo metto direttamente nella var rand mi da errori
-}
-

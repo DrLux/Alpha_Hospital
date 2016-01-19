@@ -19,8 +19,8 @@ void triage(int semPazienti, int msgqPazienti, int reparti){
 	// ROUTINE TRIAGE PRINCIPALE
 	bool accept = false; // TRUE
 	while(accept){
-		// ricevo un messaggio da msgqPazienti
-		if (false) { // se ho ricevuto un messaggio
+		// ricevo un messaggio da msgqPazienti --| recive fifo con tipe 0
+		if (false) { // se ho ricevuto un messaggio ---> ignora false
 			semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
 			// associo la malattia ad un reparto
 			// invio sulla code del reparto msgqIDReparti[NUM_REPARTO] il messaggio ricevuto

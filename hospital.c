@@ -14,11 +14,11 @@
 #define DEFAULT_TEMPO 20
 
 #define KEY_SEM_PAZIENTI 0xfaceb00c
-#define KEY_MSG_GP2TRI  0x13371337
+#define KEY_MSG_GP2TRI   0x000caffe
 
 
 int main(int argc, char* argv[]){
-
+    srand(time(NULL));
     // inizializzazione di default delle variabili
     int numPazienti = DEFAULT_PAZIENTI,
     numReparti = DEFAULT_REPARTI,

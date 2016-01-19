@@ -1,0 +1,6 @@
+ToDo.txt
+
+1) accedere ad una malloca da un altro thread (ci serve per reparto malattia in triage ed in generatore pazienti)
+2) modificare una variabile all' interno del main tramite un handler di signal
+3) la rcv message è bloccante o no?
+4) una signal viene ereditata automaticamente dai figli o no?

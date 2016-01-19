@@ -13,8 +13,8 @@ void reparto(int msgqIDtri2rep, int semPazienti){
 
 	// ROUTINE PRINCIPALE REPARTI 
 	while (false) { // TRUE
-		// se riceve un messaggio dal triage (msgqIDtri2rep)
-		if (false){
+		//qui rcv messaggio dal triage
+		if (false){ // ---> eseguo qui dentro solo se rivevo il messaggio // se riceve un messaggio dal triage (msgqIDtri2rep)
 			// lo manda alla prestazione con priorità (msgqIDrep2pre)
 			// qua bisogna gesitre starvation (oppure alla ricezione in prestazione)
 		}

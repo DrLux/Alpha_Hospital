@@ -106,5 +106,12 @@ void recvMessage(int msgid, struct paziente *msg, long msgtype) {
     }
 }
 
-
+    
+//genera un numero randomico entro un certo range di valori
+int getRand(int min , int max){
+        int casuale = 0;
+        while ( casuale < min || casuale > max)
+                casuale = rand()%10;
+        return casuale;
+}
 
