@@ -6,9 +6,7 @@ struct paziente {
 	int reparto; /* Reparto associato alla specifica malattia */
 }; 
 
-int createMsgQueue(int key, int permessi);
-void getMessage(int msgid, struct paziente *msg, long msgtype);
-void setMessage(int msgid, struct paziente *msg, long msgtype);
+
 void GeneratorePazienti(int totPazienti, int tempo, int key, int permessi);
 void malattiaPaziente(struct paziente *msg);
 
@@ -16,34 +14,7 @@ void malattiaPaziente(struct paziente *msg);
 
 
 
-// Crea una coda di messaggi con la key passata come parametro
-int createMsgQueue(int key){
-	int msgid; 
-	if ( (msgid = msgget( key, 0600 | IPC_CREAT | IPC_EXCL)) < 0 ) {
-		printf("Error msgget\n");
-		exit(EXIT_FAILURE);
-	}
-	return msgid;
-}
 
-// Scrivo messaggi in coda
-void setMessage(int msgid, struct paziente *msg, long msgtype) {
-	if (msgsnd(msgid, &msg, sizeof(msg), msgtype) == -1){	
-		printf("Error msgsnd\n");	 
-		exit(EXIT_FAILURE);
-	} 
-}
-	
-// Ottengo messaggi in base al tipo -------------> DA FINIRE --> non la chiama ancora nessuno per ora
-void getMessage(int msgid, struct paziente *msg, long msgtype) {
-        if (msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) == -1) { 
-                printf("None message with type %ld\n", msgtype);
-				exit(EXIT_FAILURE);
-        } else {
-                printf("Contenuto: %s \n", (*msg).malattia);
-                fflush(stdout);
-        }
-}
 
 void generaPazienti(int totPazienti, int tempo, int key, int permessi){
 	int childPid = 1;
@@ -82,12 +53,7 @@ void generaPazienti(int totPazienti, int tempo, int key, int permessi){
 	if (errno != ECHILD) // errore vero
 			printf("Errore wait"); 															
 
-	if (msgctl(msgid, IPC_RMID, NULL) == -1) { //elimina la coda di messaggi CORTOCIRCUITO
-            printf("\nFailure in msgctl(IPC_RMID)\n");
-			exit(EXIT_FAILURE);
-    } else {
-            printf("Coda di pazienti eliminata\n");
-    }
+	
 }
 
 

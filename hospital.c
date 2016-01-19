@@ -16,7 +16,8 @@
 #define DEFAULT_REPARTI 2
 #define DEFAULT_TEMPO 20
 
-#define KEY 0xfaceb00c
+#define KEY_SEM_PAZIENTI 0xfaceb00c
+#define KEY_MSG_GP2TRI  0x13371337
 
 
 int main(int argc, char* argv[]){
@@ -32,15 +33,32 @@ int main(int argc, char* argv[]){
     printf("Reparti: %d\n", numReparti);
     printf("Tempo: %d\n", maxTempo);
 
-    int semid = createSem(KEY, 1);
-
+    //creazione e inizializzazione semaforo numero massimo pazienti
+    int semIDnumPazienti = createSem(KEY_SEM_PAZIENTI, 1);
     initSem(semid, 0, numPazienti);
 
-    //GeneratorePazienti(numPazienti,maxTempo, KEY ,PERMESSI);
-    //triage();
+    //creazione coda di messaggi da generatore pazienti verso triage
+    int msgqIDgp2tri = createMsgQ(KEY_MSG_GP2TRI);
+
+    //creo il triage
+    pid_t pidTriage = fork();
+    if (!pidTriage) {
+        //chiamata a main triage
+        exit(EXIT_SUCCESS);
+    }
+
+    //creo il generatore di pazienti
+    pid_t pidGenPaz = fork();
+    if (!pidGenPaz) {
+        //chiamata a main generatore pazienti
+        exit(EXIT_SUCCESS);
+    }
 
 
+    // aspetto maxTempo secondi e poi mando una SIGALARM per terminare tutto
 
-    destroySem(semid);
+
+    destroyMsgQ(msgqIDgp2tri);
+    destroySem(semIDnumPazienti);
 }
 

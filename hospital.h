@@ -1,4 +1,5 @@
 typedef enum {false, true} bool; 
+
 // non compila su mac
 #if defined(__linux__)
 union semun {
@@ -17,14 +18,16 @@ void initSem(int semid, int semnum, int val);
 void semReserve(int semid, int semnum);
 void semRelease(int semid, int semnum);
 
-void triage();
+int createMsgQ(int key);
+void getMessage(int msgid, struct paziente *msg, long msgtype);
+void setMessage(int msgid, struct paziente *msg, long msgtype);
 
 
 int createSem(int key, int num){ //genera "num" semafori aventi la stessa key passata come parametro
     int semid;
-    if ((semid = semget((key_t) key, num, 0600 | IPC_CREAT | IPC_EXCL)) == -1){ //con questi permessi il semfaro è invisibile ad altri utenti
+    if ((semid = semget((key_t) key, num, 0600 | IPC_CREAT | IPC_EXCL)) == -1){ 
         if (errno == EEXIST){ // se il semaforo è già stato creato
-            semid = semget((key_t) key, num, 0600);//si limita a prendere l' id di quel semaforo
+            semid = semget((key_t) key, num, 0600); //si limita a prendere l' id di quel semaforo
         }
     }
     return semid;
@@ -71,16 +74,42 @@ void semRelease(int semid, int semnum){
         }
 }
 
-/*void triage(){
-    int msgid = createCodeMessage(KEY);
-    struct paziente msg;
-    msg.malattia = (char *) malloc(5 * sizeof(char));
-    stpcpy(msg.malattia , "lupus");
-    msg.gravita = 8;
-    msg.reparto = 2;
-    //setMessage(msgid, &msg, IPC_NOWAIT);
-}*/
+//********
 
+// Crea una coda di messaggi con la key passata come parametro
+int createMsgQ(int key) {
+    int msgqid; 
+    if ( (msgqid = msgget( key, 0600 | IPC_CREAT | IPC_EXCL)) < 0 ) {
+        printf("Error msgget IPC_CREAT\n");
+        exit(EXIT_FAILURE);
+    }
+    return msgqid;
+}
 
+int destroyMsgQ(int msgqid){
+    if (msgctl(msgid, IPC_RMID, NULL) == -1) { //elimina la coda di messaggi CORTOCIRCUITO
+        printf("Error msgctl IPC_RMID\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+// Scrivo messaggi in coda
+void sendMessage(int msgid, struct paziente *msg, long msgtype) {
+    if (msgsnd(msgid, &msg, sizeof(msg), msgtype) == -1){   
+        printf("Error msgsnd\n");    
+        exit(EXIT_FAILURE);
+    } 
+}
+    
+// Ottengo messaggi in base al tipo -------------> DA FINIRE --> non la chiama ancora nessuno per ora
+void recvMessage(int msgid, struct paziente *msg, long msgtype) {
+    if (msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) == -1) { 
+            printf("None message with type %ld\n", msgtype);
+            exit(EXIT_FAILURE);
+    } else {
+            printf("Contenuto: %s \n", (*msg).malattia);
+            fflush(stdout);
+    }
+}
 
 
