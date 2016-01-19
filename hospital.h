@@ -1,5 +1,13 @@
 typedef enum {false, true} bool; 
 
+
+//struttura che definisce il paziente
+struct paziente {
+    char *malattia; /* Nome della malattia */
+    //int mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
+    //int reparto; /* Reparto associato alla specifica malattia */
+};
+
 // non compila su mac
 #if defined(__linux__)
 union semun {
@@ -86,22 +94,22 @@ int createMsgQ(int key) {
     return msgqid;
 }
 
-int destroyMsgQ(int msgqid){
-    if (msgctl(msgid, IPC_RMID, NULL) == -1) { //elimina la coda di messaggi CORTOCIRCUITO
+void destroyMsgQ(int msgqid){
+    if (msgctl(msgqid, IPC_RMID, NULL) == -1) { //elimina la coda di messaggi CORTOCIRCUITO
         printf("Error msgctl IPC_RMID\n");
         exit(EXIT_FAILURE);
     }
 }
 
 // Scrivo messaggi in coda
-void sendMessage(int msgid, struct paziente *msg, long msgtype) {
-    if (msgsnd(msgid, &msg, sizeof(msg), msgtype) == -1){   
+void sendMessage(int msgqid, struct paziente *msg, long msgtype) {
+    if (msgsnd(msgqid, &msg, sizeof(msg), msgtype) == -1){   
         printf("Error msgsnd\n");    
         exit(EXIT_FAILURE);
     } 
 }
     
-// Ottengo messaggi in base al tipo -------------> DA FINIRE --> non la chiama ancora nessuno per ora
+// Ottengo messaggi in base al tipo
 void recvMessage(int msgid, struct paziente *msg, long msgtype) {
     if (msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) == -1) { 
             printf("None message with type %ld\n", msgtype);
@@ -111,5 +119,6 @@ void recvMessage(int msgid, struct paziente *msg, long msgtype) {
             fflush(stdout);
     }
 }
+
 
 

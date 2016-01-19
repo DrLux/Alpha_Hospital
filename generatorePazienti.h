@@ -1,59 +1,59 @@
+void generaPazienti();
+void loadMalattia(char *sintomo , int numRand);
+int contaRighe(char *path);
+int randomNumber();
+int getRand(int min , int max);
 
-//struttura che definisce il paziente
-struct paziente {
-	char *malattia; /* Nome della malattia */
-	int mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
-	int reparto; /* Reparto associato alla specifica malattia */
-}; 
-
-
-void GeneratorePazienti(int totPazienti, int tempo, int key, int permessi);
-void malattiaPaziente(struct paziente *msg);
-
-
-
-
-
-
-
-void generaPazienti(int totPazienti, int tempo, int key, int permessi){
-	int childPid = 1;
-	int msgQueueID = createMsgQueue(key, permessi);
-	struct paziente msg;
-
-	for (totPazienti; totPazienti > 0 && childPid != 0; totPazienti--) // vogliamo che solo il padre continui a ciclare
-		childPid = fork(); // il childPid dei figli verrà settato a 0 e usciranno dal ciclo
-		
-	switch (childPid) {
-		case -1:{
-			printf("Errore fork del generatore di pazienti");
-			break;
-		}		
-		
-		case 0:{
-			malattiaPaziente(&msg); //riempie la struttura dati paziente
-			printf("\nSono il figlio numero %d ed il mio Messaggio e': %s \n", getpid() , msg.malattia);
-			setMessage(msgid, &msg, 0);
-			exit(0);
-			break;
-		}
-		
-		default:{
-			sleep(tempo); // questo è un controllo fittizio di test PROVVISORIO, in realta il tempo si gestisce con un handler
-			getMessage(msgid, &msg, 0);
-			printf("\nTempo scaduto!");
-			printf("\nSono il padre e il mio id e' %d\n" , getpid());
-			break;
-		}
-	}	
-
-	// routine di test 
-	while (wait(NULL) != -1)
-		continue;
-	if (errno != ECHILD) // errore vero
-			printf("Errore wait"); 															
-
-	
+void generaPazienti(int msgqIDgp2tri , int semIDnumPazienti){
+	char* sintomo;
+	int totaleRighe = contaRighe("malattie.conf");
+	loadMalattia(sintomo, getRand(1 , totaleRighe)); //numero random da 1 al totale delle righe (valore calcolato runtime)
+	sendSintomo(msgqIDgp2tri, &sintomo, 0);
 }
 
+//Pesca una malattia a caso dal file di testo e la inserisce nei dati del paziente
+void loadMalattia(char *sintomo , int numRand){
+    char* malattiaData;
+    if (fileGetData("malattie.conf", &malattiaData)){
+		char* malattia = malattiaData; //Variabile d' appoggio per poter fare la free, altrimenti veniva fatta su malattiadata puntatore che non puntava all'inizio della malloc
+		int i;
+		for (i=0; i < numRand; i++) {
+			sintomo = strsep(&malattia, ",");
+			printf("\n Debug %s\n", sintomo);
+			strsep(&malattia, "\n");
+		}       
+		free(malattiaData); 
+    } else {
+        printf("Problemi nella lettura di malattie.txt \n");
+    }
+}
 
+//conta il numero di righe del file 
+int contaRighe(char *path){
+	int riga = 1;
+	FILE *fp = fopen(path,"r");
+	if (fp){
+		char ch;
+		while(!feof(fp)){
+			ch = fgetc(fp);
+			if(ch == '\n')
+				riga++;
+		}
+	}
+	fclose(fp);
+	return riga;
+}
+
+//genera un numero randomicamente
+int randomNumber(){
+  return rand()%10;
+}
+
+//genera un numero randomico entro un certo range di valori
+int getRand(int min , int max){
+	srand(time(NULL)+getpid());
+	int rand = 0;
+	while ( rand < min || rand > max)
+		rand = randomNumber();
+	return rand;
+}
