@@ -1,5 +1,5 @@
 void loadConfig(int* numPazienti, int* numReparti, int* maxTime);
-void parseConfig(char** data, int* numPazienti, int* numReparti, int* maxTempo);
+void parseConfig(char* data, int* numPazienti, int* numReparti, int* maxTempo);
 size_t fileLen(FILE *fp);
 bool fileGetData(char* fileName, char** data);
 bool isInt(char* c);
@@ -9,7 +9,7 @@ char* getNextLexeme(char** string);
 void loadConfig(int* numPazienti, int* numReparti, int* maxTempo){
     char* confData;
     if ( fileGetData("hospital.conf", &confData) ){
-        parseConfig(&confData, numPazienti, numReparti, maxTempo);
+        parseConfig(confData, numPazienti, numReparti, maxTempo);
         free(confData);
     } else {
         printf("hospital.conf non trovato! Applico le configurazioni di default\n");
@@ -17,9 +17,9 @@ void loadConfig(int* numPazienti, int* numReparti, int* maxTempo){
 }
 
 
-void parseConfig(char** data, int* numPazienti, int* numReparti, int* maxTempo){
+void parseConfig(char* data, int* numPazienti, int* numReparti, int* maxTempo){
     char* line;
-    while ( (line = strsep(data, "\n")) ) { // per ogni riga del file...
+    while ( (line = strsep(&data, "\n")) ) { // per ogni riga del file...
         if (*line) {
             char* paramName = getNextLexeme(&line); // ottengo il nome del parametro
 
