@@ -1,13 +1,5 @@
 typedef enum {false, true} bool; 
 
-
-//struttura che definisce il paziente
-struct paziente {
-    char *malattia; /* Nome della malattia */
-    //int mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
-    //int reparto; /* Reparto associato alla specifica malattia */
-};
-
 // non compila su mac
 #if defined(__linux__)
 union semun {
@@ -22,9 +14,8 @@ union semun {
 
 //struttura che definisce il paziente
 struct paziente {
+    long mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
     char *malattia; /* Nome della malattia */
-    int mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
-    int reparto; /* Reparto associato alla specifica malattia */
 }; 
 
 int createSem(int key, int num);
@@ -35,7 +26,7 @@ void semRelease(int semid, int semnum);
 
 int createMsgQ(int key);
 void getMessage(int msgid, struct paziente *msg, long msgtype);
-void setMessage(int msgid, struct paziente *msg, long msgtype);
+void sendMessage(int msgid, char* msgp, size_t length);
 
 
 /****
