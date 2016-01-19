@@ -10,7 +10,7 @@
 
 #include "hospital.h"
 #include "config.h"
-//#include "generatorePazienti.h"
+#include "generatorePazienti.h"
 //#include "cartellaPaziente.h"
 #include "triage.h"
 
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
     //creo il generatore di pazienti
     pid_t pidGenPaz = fork();
     if (!pidGenPaz) {
-        //chiamata a main generatore pazienti
+        generaPazienti(msgqIDgp2tri , semIDnumPazienti);
         exit(EXIT_SUCCESS);
     }
 
