@@ -1,10 +1,5 @@
 
-//struttura che definisce il paziente
-struct paziente {
-	char *malattia; /* Nome della malattia */
-	int mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
-	int reparto; /* Reparto associato alla specifica malattia */
-}; 
+
 
 
 void GeneratorePazienti(int totPazienti, int tempo, int key, int permessi);

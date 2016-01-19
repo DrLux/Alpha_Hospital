@@ -12,6 +12,13 @@ union semun {
 };
 #endif
 
+//struttura che definisce il paziente
+struct paziente {
+    char *malattia; /* Nome della malattia */
+    int mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
+    int reparto; /* Reparto associato alla specifica malattia */
+}; 
+
 int createSem(int key, int num);
 void destroySem(int semid);
 void initSem(int semid, int semnum, int val);
@@ -23,7 +30,13 @@ void getMessage(int msgid, struct paziente *msg, long msgtype);
 void setMessage(int msgid, struct paziente *msg, long msgtype);
 
 
-int createSem(int key, int num){ //genera "num" semafori aventi la stessa key passata come parametro
+/****
+FUNZIONI RELATIVE AI SEMAFORI
+*****/
+
+
+//genera "num" semafori aventi la stessa key passata come parametro
+int createSem(int key, int num){
     int semid;
     if ((semid = semget((key_t) key, num, 0600 | IPC_CREAT | IPC_EXCL)) == -1){ 
         if (errno == EEXIST){ // se il semaforo è già stato creato
@@ -33,7 +46,8 @@ int createSem(int key, int num){ //genera "num" semafori aventi la stessa key pa
     return semid;
 }
 
-void destroySem(int semid){ //distrugge il semaforo 
+//distrugge il semaforo 
+void destroySem(int semid){ 
     if (semctl(semid, 0, IPC_RMID, 0) == -1){
             printf("Error semctl\n");
             exit(EXIT_FAILURE);
@@ -74,7 +88,9 @@ void semRelease(int semid, int semnum){
         }
 }
 
-//********
+/****
+FUNZIONI RELATIVE ALLE CODE DI MESSAGGI
+*****/
 
 // Crea una coda di messaggi con la key passata come parametro
 int createMsgQ(int key) {
@@ -86,16 +102,17 @@ int createMsgQ(int key) {
     return msgqid;
 }
 
-int destroyMsgQ(int msgqid){
-    if (msgctl(msgid, IPC_RMID, NULL) == -1) { //elimina la coda di messaggi CORTOCIRCUITO
+//distrugge la coda di messaggi
+void destroyMsgQ(int msgqid){
+    if (msgctl(msgqid, IPC_RMID, NULL) == -1) { 
         printf("Error msgctl IPC_RMID\n");
         exit(EXIT_FAILURE);
     }
 }
 
 // Scrivo messaggi in coda
-void sendMessage(int msgid, struct paziente *msg, long msgtype) {
-    if (msgsnd(msgid, &msg, sizeof(msg), msgtype) == -1){   
+void sendMessage(int msgid, char* msgp, size_t length) {
+    if (msgsnd(msgid, msgp, length, 0) == -1){   
         printf("Error msgsnd\n");    
         exit(EXIT_FAILURE);
     } 

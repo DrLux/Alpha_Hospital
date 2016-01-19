@@ -7,10 +7,12 @@
 #include <sys/msg.h>
 #include <unistd.h>
 #include <errno.h>
+
 #include "hospital.h"
 #include "config.h"
 //#include "generatorePazienti.h"
 //#include "cartellaPaziente.h"
+#include "triage.h"
 
 #define DEFAULT_PAZIENTI 10
 #define DEFAULT_REPARTI 2
@@ -35,7 +37,7 @@ int main(int argc, char* argv[]){
 
     //creazione e inizializzazione semaforo numero massimo pazienti
     int semIDnumPazienti = createSem(KEY_SEM_PAZIENTI, 1);
-    initSem(semid, 0, numPazienti);
+    initSem(semIDnumPazienti, 0, numPazienti);
 
     //creazione coda di messaggi da generatore pazienti verso triage
     int msgqIDgp2tri = createMsgQ(KEY_MSG_GP2TRI);
@@ -43,6 +45,7 @@ int main(int argc, char* argv[]){
     //creo il triage
     pid_t pidTriage = fork();
     if (!pidTriage) {
+        triage(semIDnumPazienti, msgqIDgp2tri, numReparti);
         //chiamata a main triage
         exit(EXIT_SUCCESS);
     }
