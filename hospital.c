@@ -1,17 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/sem.h>
-#include <sys/types.h>
-#include <ctype.h>
-#include <sys/msg.h>
-#include <unistd.h>
-#include <errno.h>
-
 #include "hospital.h"
 #include "config.h"
-#include "triage.h"
-//#include "generatorePazienti.h"
+#include "comm.h"
+//#include "triage.h"
+#include "generatorePazienti.h"
 //#include "cartellaPaziente.h"
 
 
