@@ -49,7 +49,7 @@ int main(int argc, char* argv[]){
     //creo il triage
     pid_t pidTriage = fork();
     if (!pidTriage) {
-        triage(semIDnumPazienti, msgqIDgp2tri, numReparti);
+        //triage(semIDnumPazienti, msgqIDgp2tri, numReparti);
         //chiamata a main triage
         exit(EXIT_SUCCESS);
     }
@@ -58,7 +58,7 @@ int main(int argc, char* argv[]){
     //creo il generatore di pazienti
     pid_t pidGenPaz = fork();
     if (!pidGenPaz) {
-        //generaPazienti(msgqIDgp2tri, semIDnumPazienti);
+        generaPazienti(msgqIDgp2tri);
         exit(EXIT_SUCCESS);
     }
 

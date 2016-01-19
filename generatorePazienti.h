@@ -1,26 +1,29 @@
-void generaPazienti();
-void loadMalattia(char *sintomo , int numRand);
+void generaPazienti(int msgqIDgp2tri);
+void loadMalattia(char *sintomo, int numRand);
 int contaRighe(char *path);
+int getRand(int min, int max);
+int lunghezzaStringa(char *sintomo);
 int randomNumber();
-int getRand(int min , int max);
 
-void generaPazienti(int msgqIDgp2tri , int semIDnumPazienti){
-	char* sintomo;
+void generaPazienti(int msgqIDgp2tri){
+	struct paziente persona;
 	int totaleRighe = contaRighe("malattie.conf");
-	loadMalattia(sintomo, getRand(1 , totaleRighe)); //numero random da 1 al totale delle righe (valore calcolato runtime)
-	//sendSintomo(msgqIDgp2tri, &sintomo, 0);
+
+	loadMalattia((persona).malattia, getRand(1 , totaleRighe)); //numero random da 1 al totale delle righe (valore calcolato runtime)
+
 }
 
 //Pesca una malattia a caso dal file di testo e la inserisce nei dati del paziente
-void loadMalattia(char *sintomo , int numRand){
+void loadMalattia(char *sintomo, int numRand){
     char* malattiaData;
     if (fileGetData("malattie.conf", &malattiaData)){
-		char* malattia = malattiaData; //Variabile d' appoggio per poter fare la free, altrimenti veniva fatta su malattiadata puntatore che non puntava all'inizio della malloc
 		int i;
+		char* malattia = malattiaData;
 		for (i=0; i < numRand; i++) {
 			sintomo = strsep(&malattia, ",");
-			printf("\n Debug %s\n", sintomo);
-			strsep(&malattia, "\n");
+			printf("debug sintomo %s Lunghezza sintomo %d \n", sintomo, (int)strlen(sintomo));//questo è per accertarmi che funzioni effettivamente. Il vero comando è quello che spara nella queue
+			//sendMessage(msgqIDgp2tri, sintomo, (int)strlen(sintomo));
+			strsep(&malattia, "\n");			
 		}       
 		free(malattiaData); 
     } else {
@@ -44,16 +47,17 @@ int contaRighe(char *path){
 	return riga;
 }
 
-//genera un numero randomicamente
-int randomNumber(){
-	return rand()%10;
-}
 
 //genera un numero randomico entro un certo range di valori
 int getRand(int min , int max){
-	srand(time(NULL)+getpid());
+	srand(getpid()+ min + max);
 	int rand = 0;
 	while ( rand < min || rand > max)
 		rand = randomNumber();
 	return rand;
+}
+
+//genera un numero randomicamente
+int randomNumber(){
+  return rand()%10; //se lo metto direttamente nella var rand mi da errori
 }
