@@ -17,30 +17,30 @@
 #define DEFAULT_TEMPO 20
 
 #define KEY 0xfaceb00c
-#define PERMESSI 0600
-
-
 
 
 int main(int argc, char* argv[]){
-        int numPazienti = DEFAULT_PAZIENTI,
-        numReparti = DEFAULT_REPARTI,
-        maxTempo = DEFAULT_TEMPO;
 
-        loadConfig(&numPazienti, &numReparti, &maxTempo);
-        printf("Pazienti: %d\n", numPazienti);
-        printf("Reparti: %d\n", numReparti);
-        printf("Tempo: %d\n", maxTempo);
+    // inizializzazione di default delle variabili
+    int numPazienti = DEFAULT_PAZIENTI,
+    numReparti = DEFAULT_REPARTI,
+    maxTempo = DEFAULT_TEMPO;
+    // reinizializzazione delle variabili dal file di configurazione
+    loadConfig(&numPazienti, &numReparti, &maxTempo);
 
-        int semid = createSem(KEY, 1);
+    printf("Pazienti: %d\n", numPazienti);
+    printf("Reparti: %d\n", numReparti);
+    printf("Tempo: %d\n", maxTempo);
 
-        initSem(semid, 0, numPazienti);
+    int semid = createSem(KEY, 1);
 
-	//GeneratorePazienti(numPazienti,maxTempo, KEY ,PERMESSI);
-        //triage();
-		
+    initSem(semid, 0, numPazienti);
 
-		
-        destroySem(semid);
+    //GeneratorePazienti(numPazienti,maxTempo, KEY ,PERMESSI);
+    //triage();
+
+
+
+    destroySem(semid);
 }
 
