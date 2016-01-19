@@ -21,13 +21,14 @@ void malattiaPaziente(struct paziente *msg){
 //Pesca una malattia a caso dal file di testo e la inserisce nei dati del paziente
 void loadMalattia(struct paziente *msg , int numRand){
     char* malattiaData;
-	int i = 0;
     if (fileGetData("malattie.txt", &malattiaData)){
-		for (i ; i < numRand ; i++){
-			(*msg).malattia = strsep(&malattiaData, ",");
-			strsep(&malattiaData, "\n");
+		char* malattia = malattiaData; //Variabile d' appoggio per poter fare la free, altrimenti veniva fatta su malattiadata puntatore che non puntava all'inizio della malloc
+		int i;
+		for (i=0; i < numRand; i++) {
+			(*msg).malattia = strsep(&malattia, ",");
+			strsep(&malattia, "\n");
 		}       
-	//free(malattiaData); //NON FUNZIONA LA FREEE OCCHIO!!! da sistemare
+		free(malattiaData); 
     } else {
         printf("Problemi nella lettura di malattie.txt \n");
     }
