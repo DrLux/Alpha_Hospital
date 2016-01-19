@@ -1,13 +1,5 @@
 typedef enum {false, true} bool; 
 
-
-//struttura che definisce il paziente
-struct paziente {
-    char *malattia; /* Nome della malattia */
-    //int mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
-    //int reparto; /* Reparto associato alla specifica malattia */
-};
-
 // non compila su mac
 #if defined(__linux__)
 union semun {
@@ -22,9 +14,8 @@ union semun {
 
 //struttura che definisce il paziente
 struct paziente {
+    long mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
     char *malattia; /* Nome della malattia */
-    int mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
-    int reparto; /* Reparto associato alla specifica malattia */
 }; 
 
 int createSem(int key, int num);
@@ -33,7 +24,7 @@ void initSem(int semid, int semnum, int val);
 void semReserve(int semid, int semnum);
 void semRelease(int semid, int semnum);
 
-int createMsgQ(int key);
+int createMsgQ(int key, bool attachIfExists);
 void getMessage(int msgid, struct paziente *msg, long msgtype);
 void setMessage(int msgid, struct paziente *msg, long msgtype);
 
@@ -101,11 +92,16 @@ FUNZIONI RELATIVE ALLE CODE DI MESSAGGI
 *****/
 
 // Crea una coda di messaggi con la key passata come parametro
-int createMsgQ(int key) {
-    int msgqid; 
-    if ( (msgqid = msgget( key, 0600 | IPC_CREAT | IPC_EXCL)) < 0 ) {
-        printf("Error msgget IPC_CREAT\n");
-        exit(EXIT_FAILURE);
+int createMsgQ(int key, bool attachIfExists) {
+    int msgqid;
+    if ( (msgqid = msgget(key, 0600 | IPC_CREAT | IPC_EXCL)) < 0 ) {
+        printf("%d\n", errno);
+        if (errno == EEXIST && attachIfExists){ 
+            msgqid = msgget(key, 0600);
+        } else {
+            printf("Error msgget IPC_CREAT\n");
+            exit(EXIT_FAILURE);
+        }
     }
     return msgqid;
 }
@@ -114,7 +110,7 @@ int createMsgQ(int key) {
 //distrugge la coda di messaggi
 void destroyMsgQ(int msgqid){
     if (msgctl(msgqid, IPC_RMID, NULL) == -1) { 
-        printf("Error msgctl IPC_RMID\n");
+        printf("Error msgctl IPC_RMID (%d)\n", errno);
         exit(EXIT_FAILURE);
     }
 }

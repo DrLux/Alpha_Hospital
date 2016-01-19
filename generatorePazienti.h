@@ -8,7 +8,7 @@ void generaPazienti(int msgqIDgp2tri , int semIDnumPazienti){
 	char* sintomo;
 	int totaleRighe = contaRighe("malattie.conf");
 	loadMalattia(sintomo, getRand(1 , totaleRighe)); //numero random da 1 al totale delle righe (valore calcolato runtime)
-	sendSintomo(msgqIDgp2tri, &sintomo, 0);
+	//sendSintomo(msgqIDgp2tri, &sintomo, 0);
 }
 
 //Pesca una malattia a caso dal file di testo e la inserisce nei dati del paziente
@@ -46,7 +46,7 @@ int contaRighe(char *path){
 
 //genera un numero randomicamente
 int randomNumber(){
-  return rand()%10;
+	return rand()%10;
 }
 
 //genera un numero randomico entro un certo range di valori
