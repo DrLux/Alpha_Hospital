@@ -1,8 +1,8 @@
 #include "hospital.h"
 #include "config.h"
-#include "generatorePazienti.h"
+#include "pazienti.h"
 
-void generaPazienti(int msgqIDgp2tri){
+void pazienti(int msgqIDgp2tri){
 	struct paziente persona;
 	int totaleRighe = contaRighe("malattie.conf");
 

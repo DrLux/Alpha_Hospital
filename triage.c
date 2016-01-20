@@ -18,6 +18,7 @@ void triage(int semPazienti, int msgqPazienti, int reparti){
 
 	// ROUTINE TRIAGE PRINCIPALE
 	bool accept = false; // TRUE
+	
 	while(accept){
 		// ricevo un messaggio da msgqPazienti --| recive fifo con tipe 0
 		if (false) { // se ho ricevuto un messaggio ---> ignora false

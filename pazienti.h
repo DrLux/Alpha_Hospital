@@ -1,4 +1,3 @@
-
 void generaPazienti(int msgqIDgp2tri);
 void loadMalattia(char *sintomo, int numRand);
 int contaRighe(char *path);

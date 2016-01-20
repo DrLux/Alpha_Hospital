@@ -2,12 +2,8 @@
 #include "config.h"
 #include "comm.h"
 //#include "triage.h"
-#include "generatorePazienti.h"
+#include "pazienti.h"
 //#include "cartellaPaziente.h"
-
-
-
-
 
 #define DEFAULT_PAZIENTI 10
 #define DEFAULT_REPARTI 2
@@ -35,7 +31,11 @@ int main(int argc, char* argv[]){
     initSem(semIDnumPazienti, 0, numPazienti);
     //creazione coda di messaggi da generatore pazienti verso triage
     int msgqIDgp2tri = createMsgQ(KEY_MSG_GP2TRI, true);
-
+    //creazione Handler per la SIGALARM
+    if (signal(SIGALRM, chiusuraOspedale) == SIG_ERR) //sigalarm = 14
+        printf("signal (SIG_ERR) error");
+    //inizializzazione timer per la SIGALARM
+    alarm(maxTempo);
 
     //creo il triage
     pid_t pidTriage = fork();
@@ -61,3 +61,11 @@ int main(int argc, char* argv[]){
     destroySem(semIDnumPazienti);
 }
 
+//CHIEDERE DOVE METTERE QUESTO PROTOTIPO
+static void chiusuraOspedale(int sig){
+    if (sig == SIGALRM)
+      GLOBAL_SWITCH = 1;
+    if (sig == SIGQUIT)
+      GLOBAL_SWITCH = 2;
+    return;
+}
