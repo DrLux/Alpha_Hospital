@@ -20,8 +20,8 @@
 
 int main(int argc, char* argv[]){
 
-    //srand(getpid());
-    srand(time(NULL));
+    srand(getpid());
+    //srand(time(NULL));
     // inizializzazione di default delle variabili
     int numPazienti = DEFAULT_PAZIENTI,
     numReparti = DEFAULT_REPARTI,
@@ -68,11 +68,13 @@ int main(int argc, char* argv[]){
     initSem(semIDnumPazienti, 0, numPazienti);
     //creazione coda di messaggi da generatore pazienti verso triage
     int msgqIDgp2tri = createMsgQ(KEY_MSG_GP2TRI, true);
+    /*
     //creazione Handler per la SIGALARM
     if (signal(SIGALRM, chiusuraOspedale) == SIG_ERR) //sigalarm = 14
         printf("signal (SIG_ERR) error");
     //inizializzazione timer per la SIGALARM
     alarm(maxTempo);
+    */
 
     //creo il triage
     pid_t pidTriage = fork();
@@ -107,7 +109,7 @@ int main(int argc, char* argv[]){
     destroySem(semIDnumPazienti);
 }
 
-
+/*
 //CHIEDERE DOVE METTERE QUESTO PROTOTIPO
 static void chiusuraOspedale(int sig){
     if (sig == SIGALRM)
@@ -116,4 +118,4 @@ static void chiusuraOspedale(int sig){
       GLOBAL_SWITCH = 2;
     return;
 }
-
+*/
