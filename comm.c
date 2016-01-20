@@ -88,30 +88,26 @@ void destroyMsgQ(int msgqid){
 }
 
 // Scrivo messaggi in coda
-void sendMessage(int msgid, char* msgp, size_t length) {
-    if (msgsnd(msgid, msgp, length, 0) == -1){   
+void sendMessage(int msgid, struct paziente *msg, size_t length) {
+    if (msgsnd(msgid, msg, length, 0) == -1){   
         printf("Error msgsnd\n");    
         exit(EXIT_FAILURE);
     } 
 }
     
 // Ottengo messaggi in base al tipo
-void recvMessage(int msgid, struct paziente *msg, long msgtype) {
-    if (msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) == -1) { 
-            printf("None message with type %ld\n", msgtype);
-            exit(EXIT_FAILURE);
-    } else {
-            printf("Contenuto: %s \n", (*msg).malattia);
-            fflush(stdout);
-    }
+bool recvMessage(int msgid, struct paziente *msg, long msgtype) {
+   return msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) != ENOMSG; 
 }
 
 
+// genera un numero casuale entro un range
 int getRand(int min, int max){
     int casuale;
     do{
         casuale = rand()%10;
     }while(casuale < min || casuale > max); 
     return casuale;
+
 }
 

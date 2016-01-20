@@ -15,6 +15,7 @@ struct paziente {
     char *malattia; /* Nome della malattia */
 }; 
 
+
 struct schedaSintomo {
     char* sintomo;
     int reparto;
@@ -25,3 +26,10 @@ struct elencoSintomi {
 	int numSintomi;
 	struct schedaSintomo** arraySintomi;
 };
+
+//Handler che gestisce SigQuit e SigAlarm
+static void chiusuraOspedale(int sig);
+
+//variabile globale che definisce se l' ospedale è aperto o chiuso
+extern int GLOBAL_SWITCH;
+

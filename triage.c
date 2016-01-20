@@ -18,9 +18,10 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 
 	// ROUTINE TRIAGE PRINCIPALE
 	bool accept = false; // TRUE
+	
 	while(accept){
-		// ricevo un messaggio da msgqPazienti
-		if (false) { // se ho ricevuto un messaggio
+		// ricevo un messaggio da msgqPazienti --| recive fifo con tipe 0
+		if (false) { // se ho ricevuto un messaggio ---> ignora false
 			semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
 			char* sintomoRicevuto = "TEMP"; // AGGIORNARE CON MESSAGGIO RICEVUTO DALLA CODA
 			int reparto, gravita;

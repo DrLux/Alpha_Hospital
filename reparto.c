@@ -10,14 +10,15 @@ void reparto(int msgqIDtri2rep, int semPazienti){
 		exit(EXIT_SUCCESS);
 	}
 
-
+	
 	// ROUTINE PRINCIPALE REPARTI 
-	while (false) { // TRUE
-		// se riceve un messaggio dal triage (msgqIDtri2rep)
-		if (false){
-			// lo manda alla prestazione con priorità (msgqIDrep2pre)
-			// qua bisogna gesitre starvation (oppure alla ricezione in prestazione)
-		}
+	struct paziente *paz_rep = malloc (sizeof(struct paziente));//qui fare la malloc
+	bool open = true;
+	while (open && GLOBAL_SWITCH != 2) { 
+		if (recvMessage(msgqIDtri2rep, paz_rep, 0)) //se ci sono pazienti in lista di attesa
+			sendMessage(msgqIDrep2pre, paz_rep, (int)strlen((*paz_rep).malattia));// lo manda alla prestazione con priorità (msgqIDrep2pre)
+		else	if (GLOBAL_SWITCH == 1) //controlla che l' ospedale sia chiuso
+					open = false;
 		sleep(1); // a intervalli regolari
 	}
 

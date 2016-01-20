@@ -23,7 +23,7 @@ void semRelease(int semid, int semnum);
 int createMsgQ(int key, bool attachIfExists);
 void destroyMsgQ(int msgqid);
 void getMessage(int msgid, struct paziente *msg, long msgtype);
-void sendMessage(int msgid, char* msgp, size_t length);
 
+void sendMessage(int msgid, struct paziente *msg, size_t length);
 int getRand(int min, int max);
 
