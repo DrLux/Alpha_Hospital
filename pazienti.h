@@ -1,5 +1,5 @@
 
-void generaPazienti(int msgqIDgp2tri, struct elencoSintomi* sintomi);
+void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sintomi);
 int countLine(char *path);
 int getRand(int min, int max);
 int lunghezzaStringa(char *sintomo);

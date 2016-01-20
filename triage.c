@@ -18,11 +18,12 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 
 	// ROUTINE TRIAGE PRINCIPALE
 	bool accept = true; // TRUE
-	
+	int counter=0;
 	while(accept){
-		// ricevo un messaggio da msgqPazienti --| recive fifo (con coda di messaggi) con tipe 0
 		if (recvMessage(msgqPazienti, &persona, 0)) { // se ho ricevuto un messaggio ---> ignora false
-			printf("[Triage] %s\n", persona.sintomo);
+
+			//printf("[Triage] type: %ld, add sintomo: %p\n", persona.mtype, persona.sintomo);
+			printf("ATTENDO PERMESSO\n");
 			semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
 
 			char* sintomoRicevuto = persona.sintomo; //"TEMP"; // AGGIORNARE CON MESSAGGIO RICEVUTO DALLA CODA
@@ -30,8 +31,25 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 			// associo il sintomo al reparto e alla gravita corrispondente
 			getRepartoGravita(sintomi, sintomoRicevuto, &reparto, &gravita);
 			printf("[Triage] %s %d %d\n", sintomoRicevuto, reparto, gravita);
+			fflush(stdout);
 			// invio sulla code del reparto msgqIDReparti[NUM_REPARTO] il messaggio ricevuto
 			// sendFifo -> reparto, priorita 
+			//free(persona.sintomo);
+			counter++;
+		}
+		if (counter>9){
+			//sleep(3);
+			printf("AZZERO\n");
+			semRelease(semPazienti, 0);
+			semRelease(semPazienti, 0);
+			semRelease(semPazienti, 0);
+			semRelease(semPazienti, 0);
+			semRelease(semPazienti, 0);
+			semRelease(semPazienti, 0);
+			semRelease(semPazienti, 0);
+			semRelease(semPazienti, 0);
+			semRelease(semPazienti, 0);
+			semRelease(semPazienti, 0);
 		}
 	}
 

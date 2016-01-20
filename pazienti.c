@@ -5,15 +5,20 @@
 
 
 // genera messaggi relativi ai pazienti verso il triage
-void generaPazienti(int msgqIDgp2tri, struct elencoSintomi* sintomi){
+void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sintomi){
 	struct paziente persona;
-
-	int i=10;
-	while(i--){
+	persona.mtype = 1;
+	int i=0;
+	while(true){
+		//semReserve(semPazienti, 0);
 		persona.sintomo = getSintomoRantom(sintomi);
-		printf("[Pazienti] %s\n", persona.sintomo);
+		printf("[Pazienti %d] %s\n", i, persona.sintomo);
+		fflush(stdout);
 		sendMessage(msgqIDgp2tri, &persona);
+		i++;
 	}
+
+	//while(true);
 	//sendMessage(msgqIDgp2tri, sintomo, (int)strlen(sintomo));
 
 	//persona.malattia = (char*) malloc(sizeof());
@@ -100,9 +105,10 @@ char* getSintomoRantom(struct elencoSintomi* sintomi){
 	int maxRandom = (*sintomi).numSintomi-1;
 	int random = getRand(0, maxRandom);
 	char* sintomoRandom = (*(*sintomi).arraySintomi[random]).sintomo;
-	char* sintomo = (char*) malloc(strlen(sintomoRandom)+1);
-	strcpy(sintomo, sintomoRandom);
-	return sintomo;
+	//char* sintomo = (char*) malloc(sizeof(char)*strlen(sintomoRandom)+1);
+	//strcpy(sintomo, sintomoRandom);
+	//return sintomo;
+	return sintomoRandom;
 }
 
 

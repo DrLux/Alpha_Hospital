@@ -67,7 +67,11 @@ int main(int argc, char* argv[]){
     int semIDnumPazienti = createSem(KEY_SEM_PAZIENTI, 1);
     initSem(semIDnumPazienti, 0, numPazienti);
     //creazione coda di messaggi da generatore pazienti verso triage
-    int msgqIDgp2tri = createMsgQ(KEY_MSG_GP2TRI, true);
+    int msgqIDgp2tri = createMsgQ(KEY_MSG_GP2TRI, false);
+    //struct msqid_ds queue_ds;
+    //getInfo(msgqIDgp2tri, &queue_ds);
+
+
     /*
     //creazione Handler per la SIGALARM
     if (signal(SIGALRM, chiusuraOspedale) == SIG_ERR) //sigalarm = 14
@@ -88,13 +92,14 @@ int main(int argc, char* argv[]){
     //creo il generatore di pazienti
     pid_t pidGenPaz = fork();
     if (!pidGenPaz) {
-        generaPazienti(msgqIDgp2tri, sintomi);
+        generaPazienti(semIDnumPazienti, msgqIDgp2tri, sintomi);
         exit(EXIT_SUCCESS);
     }
 
 
     // aspetto maxTempo secondi e poi mando una SIGALARM per terminare tutto
 
+    sleep(maxTempo);
 
     // libero memoria sintomi (forse da spostare se questo main termina prima di triage)
     int i;

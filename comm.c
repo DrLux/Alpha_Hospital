@@ -89,7 +89,9 @@ void destroyMsgQ(int msgqid){
 
 // Scrivo messaggi in coda
 void sendMessage(int msgid, struct paziente *msg) {
-    if (msgsnd(msgid, msg, sizeof(struct paziente), 0) == -1){   
+    if (msgsnd(msgid, msg, sizeof(*msg), 0) == -1){  
+        //if (errno == EAGAIN)
+        //    printf("Coda piena\n"); 
         printf("Error msgsnd (%d)\n", errno);    
         exit(EXIT_FAILURE);
     } 
@@ -97,7 +99,7 @@ void sendMessage(int msgid, struct paziente *msg) {
     
 // Ottengo messaggi in base al tipo
 bool recvMessage(int msgid, struct paziente *msg, long msgtype) {
-    if (msgrcv(msgid, msg, sizeof(struct paziente), msgtype, IPC_NOWAIT) < 0){
+    if (msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) < 0){
         if (errno == ENOMSG){
             return false;
         } else {
@@ -106,8 +108,18 @@ bool recvMessage(int msgid, struct paziente *msg, long msgtype) {
         }
     }
     return true;
-    //return msgrcv(msgid, msg, sizeof(struct paziente), msgtype, IPC_NOWAIT) != ENOMSG; 
 }
+
+/*
+void getInfo(int qid, struct msqid_ds *queue_ds){
+    printf("[info] ID CODA: %d\n", qid);
+    if (msgctl(qid, IPC_STAT, queue_ds ) == -1 ) { 
+        printf("msgctl error (%d)\n", errno);
+        exit(EXIT_FAILURE);
+    }
+    printf("Num of messages in queue: %d\n", (int) (*queue_ds).msg_qnum);
+}
+*/
 
 
 // genera un numero casuale entro un range
