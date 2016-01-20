@@ -1,7 +1,7 @@
 #include "hospital.h"
 #include "triage.h"
 
-void triage(int semPazienti, int msgqPazienti, int reparti){
+void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi* sintomi){
 
 	int* msgqIDReparti = (int*) malloc(reparti*sizeof(int));
 	int msgqIDReparto;
@@ -22,14 +22,18 @@ void triage(int semPazienti, int msgqPazienti, int reparti){
 		// ricevo un messaggio da msgqPazienti
 		if (false) { // se ho ricevuto un messaggio
 			semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
-			// associo la malattia ad un reparto
+			char* sintomoRicevuto = "TEMP"; // AGGIORNARE CON MESSAGGIO RICEVUTO DALLA CODA
+			int reparto, gravita;
+			// associo il sintomo al reparto e alla gravita corrispondente
+			getRepartoGravita(sintomi, sintomoRicevuto, &reparto, &gravita);
 			// invio sulla code del reparto msgqIDReparti[NUM_REPARTO] il messaggio ricevuto
+			// sendFifo -> reparto, priorita 
 		}
 	}
 
 
 
-	// pulisco memoria e code messaggi
+	// pulisco memoria e code messaggi // DA RIFARE CON FIFO
 	int i;
 	for (i=0; i<reparti; i++) {
 		destroyMsgQ(msgqIDReparti[i]);
@@ -38,7 +42,7 @@ void triage(int semPazienti, int msgqPazienti, int reparti){
 }
 
 
-
+// crea tanti figli quanti sono i reparti e ad ognuno crea e passa una coda di messaggi // DA RIFARE CON FIFO
 bool createChildsWithQueue(int n, int* msgqids, int* repmsgqid){
 	bool isChild = false;
 	int i;
@@ -52,3 +56,17 @@ bool createChildsWithQueue(int n, int* msgqids, int* repmsgqid){
 	}
 	return isChild;
 }
+
+// ottiene il reparto e la gravita corrispondenti a un sintomo
+void getRepartoGravita(struct elencoSintomi* sintomi, char* sintomoRicevuto, int* reparto, int* gravita){
+	int i;
+	for (i=0; i<(*sintomi).numSintomi; i++) {
+		if (!strcmp((*(*sintomi).arraySintomi[i]).sintomo, sintomoRicevuto)) {
+			*reparto = (*(*sintomi).arraySintomi[i]).reparto;
+			*gravita = (*(*sintomi).arraySintomi[i]).gravita;
+			break;
+		}
+	}
+}
+
+

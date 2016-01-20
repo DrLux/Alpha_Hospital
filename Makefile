@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -Wall -pedantic
 LDFLAGS=
-SOURCES=hospital.c config.c comm.c generatorePazienti.c triage.c reparto.c prestazione.c 
+SOURCES=hospital.c config.c comm.c pazienti.c triage.c reparto.c prestazione.c 
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=hospital
 

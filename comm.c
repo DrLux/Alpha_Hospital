@@ -107,4 +107,11 @@ void recvMessage(int msgid, struct paziente *msg, long msgtype) {
 }
 
 
+int getRand(int min, int max){
+    int casuale;
+    do{
+        casuale = rand()%10;
+    }while(casuale < min || casuale > max); 
+    return casuale;
+}
 

@@ -15,3 +15,13 @@ struct paziente {
     char *malattia; /* Nome della malattia */
 }; 
 
+struct schedaSintomo {
+    char* sintomo;
+    int reparto;
+    int gravita;
+};
+
+struct elencoSintomi {
+	int numSintomi;
+	struct schedaSintomo** arraySintomi;
+};
