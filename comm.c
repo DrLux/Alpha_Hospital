@@ -88,16 +88,25 @@ void destroyMsgQ(int msgqid){
 }
 
 // Scrivo messaggi in coda
-void sendMessage(int msgid, struct paziente *msg, size_t length) {
-    if (msgsnd(msgid, msg, length, 0) == -1){   
-        printf("Error msgsnd\n");    
+void sendMessage(int msgid, struct paziente *msg) {
+    if (msgsnd(msgid, msg, sizeof(struct paziente), 0) == -1){   
+        printf("Error msgsnd (%d)\n", errno);    
         exit(EXIT_FAILURE);
     } 
 }
     
 // Ottengo messaggi in base al tipo
 bool recvMessage(int msgid, struct paziente *msg, long msgtype) {
-   return msgrcv(msgid, msg, sizeof(*msg), msgtype, IPC_NOWAIT) != ENOMSG; 
+    if (msgrcv(msgid, msg, sizeof(struct paziente), msgtype, IPC_NOWAIT) < 0){
+        if (errno == ENOMSG){
+            return false;
+        } else {
+            printf("Error msgrecv (%d)\n", errno);    
+            exit(EXIT_FAILURE);
+        }
+    }
+    return true;
+    //return msgrcv(msgid, msg, sizeof(struct paziente), msgtype, IPC_NOWAIT) != ENOMSG; 
 }
 
 

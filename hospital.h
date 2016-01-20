@@ -12,7 +12,7 @@
 //struttura che definisce il paziente
 struct paziente {
     long mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
-    char *malattia; /* Nome della malattia */
+    char *sintomo; /* Nome della malattia */
 }; 
 
 

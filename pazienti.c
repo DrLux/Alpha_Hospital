@@ -1,6 +1,7 @@
 #include "hospital.h"
 #include "config.h"
 #include "pazienti.h"
+#include "comm.h"
 
 
 // genera messaggi relativi ai pazienti verso il triage
@@ -9,8 +10,9 @@ void generaPazienti(int msgqIDgp2tri, struct elencoSintomi* sintomi){
 
 	int i=10;
 	while(i--){
-		char* sintomo = getSintomoRantom(sintomi);
-		printf("%s\n", sintomo);
+		persona.sintomo = getSintomoRantom(sintomi);
+		printf("[Pazienti] %s\n", persona.sintomo);
+		sendMessage(msgqIDgp2tri, &persona);
 	}
 	//sendMessage(msgqIDgp2tri, sintomo, (int)strlen(sintomo));
 

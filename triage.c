@@ -14,19 +14,22 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 	}
 
 
-
+	struct paziente persona;
 
 	// ROUTINE TRIAGE PRINCIPALE
-	bool accept = false; // TRUE
+	bool accept = true; // TRUE
 	
 	while(accept){
-		// ricevo un messaggio da msgqPazienti --| recive fifo con tipe 0
-		if (false) { // se ho ricevuto un messaggio ---> ignora false
+		// ricevo un messaggio da msgqPazienti --| recive fifo (con coda di messaggi) con tipe 0
+		if (recvMessage(msgqPazienti, &persona, 0)) { // se ho ricevuto un messaggio ---> ignora false
+			printf("[Triage] %s\n", persona.sintomo);
 			semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
-			char* sintomoRicevuto = "TEMP"; // AGGIORNARE CON MESSAGGIO RICEVUTO DALLA CODA
+
+			char* sintomoRicevuto = persona.sintomo; //"TEMP"; // AGGIORNARE CON MESSAGGIO RICEVUTO DALLA CODA
 			int reparto, gravita;
 			// associo il sintomo al reparto e alla gravita corrispondente
 			getRepartoGravita(sintomi, sintomoRicevuto, &reparto, &gravita);
+			printf("[Triage] %s %d %d\n", sintomoRicevuto, reparto, gravita);
 			// invio sulla code del reparto msgqIDReparti[NUM_REPARTO] il messaggio ricevuto
 			// sendFifo -> reparto, priorita 
 		}
