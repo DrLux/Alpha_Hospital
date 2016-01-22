@@ -14,13 +14,19 @@
 #define KEY_SEM_PAZIENTI 0xfaceb00c
 #define KEY_MSG_GP2TRI   0x000caffe
 
-
-
+bool OSPEDALE_APERTO = true;
+void sigquit_handler(int signum){
+    if (signum == SIGQUIT){
+        OSPEDALE_APERTO = false;
+    }
+}
 
 
 int main(int argc, char* argv[]){
 
     srand(getpid());
+    //setbuf(stdout, NULL);
+
     //srand(time(NULL));
     // inizializzazione di default delle variabili
     int numPazienti = DEFAULT_PAZIENTI,
@@ -72,6 +78,8 @@ int main(int argc, char* argv[]){
     //getInfo(msgqIDgp2tri, &queue_ds);
 
 
+    if (signal(SIGQUIT, sigquit_handler) == SIG_ERR) 
+        printf("signal (SIGQUIT) error");
     /*
     //creazione Handler per la SIGALARM
     if (signal(SIGALRM, chiusuraOspedale) == SIG_ERR) //sigalarm = 14
@@ -99,7 +107,18 @@ int main(int argc, char* argv[]){
 
     // aspetto maxTempo secondi e poi mando una SIGALARM per terminare tutto
 
-    sleep(maxTempo);
+    //sleep(maxTempo);
+
+    while(OSPEDALE_APERTO){
+        sleep(1);
+    }
+
+    //while(wait(NULL) != -1);
+    printf("[Hospital] ** ATTENDO FIGLI **\n");
+
+    waitAllChild();
+
+    printf("[Hospital] ** CHIUDO **\n");
 
     // libero memoria sintomi (forse da spostare se questo main termina prima di triage)
     int i;
@@ -113,6 +132,8 @@ int main(int argc, char* argv[]){
     destroyMsgQ(msgqIDgp2tri);
     destroySem(semIDnumPazienti);
 }
+
+
 
 /*
 //CHIEDERE DOVE METTERE QUESTO PROTOTIPO

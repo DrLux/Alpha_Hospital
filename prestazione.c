@@ -1,9 +1,14 @@
 #include "hospital.h"
 #include "prestazione.h"
 
-void prestazione(int msgqIDrep2pre, int semPazienti){
-	struct paziente *paz_pre = malloc (sizeof(struct paziente));//qui fare la malloc
-	bool open = true;
+
+void prestazione(int msgqIDrep2pre, int IDPrestazione, int semPazienti){
+	printf("PRESTAZIONE %d AVVIATO\n", IDPrestazione);
+	while(OSPEDALE_APERTO);
+	//printf("(Prestazione) %d\n", getpid());
+	
+	//struct paziente *paz_pre = malloc (sizeof(struct paziente));//qui fare la malloc
+	//bool open = true;
 	/*
 	while (open && GLOBAL_SWITCH != 2){//GLOBAL_SWITCH viene settata a 2 in caso di sigquit 
 		if (recvMessage(msgqIDrep2pre, paz_pre, -10)){ //opero il paziente che ricevo
@@ -14,6 +19,9 @@ void prestazione(int msgqIDrep2pre, int semPazienti){
 			open = false; //break per uscire dal ciclo	
 	} //se non ci sono pazienti ma l' ospedale è ancora aperto, continuo a ciclare
 	*/
-	free(paz_pre);
+	//free(paz_pre);
 	//semRelease(semPazienti, 0);
+
+	printf("[Prestazione %d] ** CHIUDO **\n", IDPrestazione);
+
 }

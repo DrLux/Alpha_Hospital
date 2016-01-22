@@ -8,10 +8,22 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <limits.h>
+
+extern bool OSPEDALE_APERTO;
 
 //struttura che definisce il paziente
+struct cliente {
+    long mtype; /* non usato, mantenuto per compatibilita con message queue */
+    char* sintomo; /* Nome della malattia */
+}; 
+
 struct paziente {
-    long mtype; /* GRAVITA Indice (da 1 a 10) di gravita della malattia del paziente */
+    long turno; /* usato come indice priorita nelle prestazioni */
+    unsigned long ID;
+    int gravita;
     char* sintomo; /* Nome della malattia */
 }; 
 
@@ -26,6 +38,7 @@ struct elencoSintomi {
 	int numSintomi;
 	struct schedaSintomo** arraySintomi;
 };
+
 
 //Handler che gestisce SigQuit e SigAlarm
 //static void chiusuraOspedale(int sig);

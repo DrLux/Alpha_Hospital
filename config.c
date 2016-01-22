@@ -23,22 +23,32 @@ void parseConfig(char* data, int* numPazienti, int* numReparti, int* maxTempo){
                 char* paramVal = getNextLexeme(&line); // ottengo il valore del parametro
                 if (!strcmp(paramName, "pazienti")) {
 
-                    if (isInt(paramVal))
+                    if (isInt(paramVal) && verifyRangeConfig(paramName, atoi(paramVal), 1, INT_MAX))
                         *numPazienti = atoi(paramVal); // assegno il valore alla variabile
 
                 } else if (!strcmp(paramName, "reparti")){
 
-                    if (isInt(paramVal))
+                    if (isInt(paramVal) && verifyRangeConfig(paramName, atoi(paramVal), 1, 10))
                         *numReparti = atoi(paramVal);
 
                 } else if (!strcmp(paramName, "tempo")){
 
-                    if (isInt(paramVal))
+                    if (isInt(paramVal) && verifyRangeConfig(paramName, atoi(paramVal), 1, INT_MAX))
                         *maxTempo = atoi(paramVal);
 
                 }
+
             }
         }
+    }
+}
+
+bool verifyRangeConfig(char* name, int num, int min, int max) {
+    if (num >= min && num <= max)
+        return true;
+    else {
+        printf("Valore '%s' invalido, applico default\n", name);
+        return false;
     }
 }
 
@@ -91,4 +101,6 @@ bool isInt(char* c){
     } while (*c);
     return true;
 }
+
+
 

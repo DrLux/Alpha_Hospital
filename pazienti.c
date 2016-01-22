@@ -3,28 +3,43 @@
 #include "pazienti.h"
 #include "comm.h"
 
-
 // genera messaggi relativi ai pazienti verso il triage
 void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sintomi){
-	struct paziente persona;
+	printf("PAZIENTI AVVIATO\n");
+
+
+	struct cliente persona;
 	persona.mtype = 1;
+
 	int i=0;
-	while(true){
+	while(OSPEDALE_APERTO){
 		//semReserve(semPazienti, 0);
-		persona.sintomo = getSintomoRantom(sintomi);
-		printf("[Pazienti %d] %s\n", i, persona.sintomo);
-		fflush(stdout);
-		sendMessage(msgqIDgp2tri, &persona);
+		persona.sintomo = getSintomoRandom(sintomi);
+
+		printf("[Pazienti %d] %s\n", i, persona.sintomo); // scommenta per vedere pazienti generati
+
+		sendMessage(msgqIDgp2tri, &persona, sizeof(persona));
 		i++;
 	}
 
-	//while(true);
-	//sendMessage(msgqIDgp2tri, sintomo, (int)strlen(sintomo));
+/*
+	bool genereteNewClient = true;
+	while(OSPEDALE_APERTO){
+		if (genereteNewClient){
+			persona.sintomo = getSintomoRantom(sintomi);
+			printf("[Pazienti %d] %s\n", i, persona.sintomo); // scommenta per vedere pazienti generati
+		}
 
-	//persona.malattia = (char*) malloc(sizeof());
-	//int totaleRighe = contaRighe("malattie.conf");
+		if( sendMessage(msgqIDgp2tri, &persona, sizeof(persona)) ) {
+			genereteNewClient = true;
+			i++;
+		} else {
+			genereteNewClient = false;
+		}
+	}
+	*/
 
-	//loadMalattia((persona).malattia, getRand(1 , totaleRighe)); //numero random da 1 al totale delle righe (valore calcolato runtime)
+	printf("[Pazienti] ** CHIUDO **\n");
 
 }
 
@@ -41,7 +56,7 @@ void loadSintomi(struct elencoSintomi** sintomi){
 }
 
 
-// inserisce in un arrai di puntatori a struct i sintomi e i relativi reparti e gravita
+// inserisce in un array di puntatori a struct i sintomi e i relativi reparti e gravita
 void parseSintomi(char* data, struct elencoSintomi** sintomi){
 	
 	int nLine = countLine(data);
@@ -68,11 +83,10 @@ void parseSintomi(char* data, struct elencoSintomi** sintomi){
 							localMalattiaArray[realLength] = (struct schedaSintomo*) malloc(sizeof(struct schedaSintomo));
 							(*localMalattiaArray[realLength]).sintomo = (char*) malloc(strlen(sintomo)+1); // +1 per terminatore stringa
 					        strcpy((*localMalattiaArray[realLength]).sintomo, sintomo);
-					        (*localMalattiaArray[realLength]).reparto = atoi(reparto);
-					        (*localMalattiaArray[realLength]).gravita = atoi(gravita);
+					        (*localMalattiaArray[realLength]).reparto = rangeRestrict(atoi(reparto), 1, 10);
+					        (*localMalattiaArray[realLength]).gravita = rangeRestrict(atoi(gravita), 1, 10);
 							realLength++;
 						}
-
 					} 
 				}
 			}
@@ -99,9 +113,13 @@ int countLine(char *dataPointer){
 	return counter;
 }
 
+int rangeRestrict(int num, int min, int max){
+    return (num>max)? max : ((num<min)? min: num);
+}
+
 
 // ottiene un sintomo random dalla lista su file
-char* getSintomoRantom(struct elencoSintomi* sintomi){
+char* getSintomoRandom(struct elencoSintomi* sintomi){
 	int maxRandom = (*sintomi).numSintomi-1;
 	int random = getRand(0, maxRandom);
 	char* sintomoRandom = (*(*sintomi).arraySintomi[random]).sintomo;

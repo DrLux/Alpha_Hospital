@@ -15,8 +15,10 @@ getNextLexeme -> salta tutti gli spazi e i tab finche trova una stringa, quando 
 
 void loadConfig(int* numPazienti, int* numReparti, int* maxTime);
 void parseConfig(char* data, int* numPazienti, int* numReparti, int* maxTempo);
+bool verifyRangeConfig(char* name, int num, int min, int max);
+char* getNextLexeme(char** string);
 size_t fileLen(FILE *fp);
 bool fileGetData(char* fileName, char** data);
 bool isInt(char* c);
-char* getNextLexeme(char** string);
+
 
