@@ -30,8 +30,9 @@ void reparto(char* fifoPathTriage, int IDReparto, int semPazienti){
 
 			printf("[Reparto %d] Paziente: %ld, Sintomo: %s, Gravita: %d\n", IDReparto, pazienteDaServire.ID, pazienteDaServire.sintomo, pazienteDaServire.gravita);
 
+			printf("++++ RICEVUTO ++++ %ld\n", pazienteDaServire.turno);
 			sendMessage(msgqIDPrestazione, &pazienteDaServire, sizeof(pazienteDaServire));
-
+			printf("++++ INVIATO ++++\n");
 			sleep(1); // a intervalli regolari
 		} 
 	}

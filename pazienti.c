@@ -5,7 +5,7 @@
 
 // genera messaggi relativi ai pazienti verso il triage
 void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sintomi){
-	printf("PAZIENTI AVVIATO\n");
+	printf("PAZIENTI AVVIATO (sem: %d)\n", semPazienti);
 
 
 	struct cliente persona;
@@ -14,10 +14,11 @@ void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sin
 	int i=0;
 	while(OSPEDALE_APERTO){
 		//semReserve(semPazienti, 0);
+		semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
+		if (!OSPEDALE_APERTO) break;
+
 		persona.sintomo = getSintomoRandom(sintomi);
-
 		printf("[Pazienti %d] %s\n", i, persona.sintomo); // scommenta per vedere pazienti generati
-
 		sendMessage(msgqIDgp2tri, &persona, sizeof(persona));
 		i++;
 	}

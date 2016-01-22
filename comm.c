@@ -20,7 +20,7 @@ int createSem(int key, int num){
 //distrugge il semaforo 
 void destroySem(int semid){ 
     if (semctl(semid, 0, IPC_RMID, 0) == -1){
-            printf("Error semctl (%d)\n", errno);
+            printf("Error destroySem (%d)\n", errno);
             exit(EXIT_FAILURE);
     }
 }
@@ -30,7 +30,7 @@ void initSem(int semid, int semnum, int val){
         union semun arg;
         arg.val = val;
         if (semctl(semid, semnum, SETVAL, arg) == -1){
-                printf("Error semctl (%d)\n", errno);
+                printf("Error initSem (%d)\n", errno);
                 exit(EXIT_FAILURE);
         }
 }
@@ -43,7 +43,7 @@ void semReserve(int semid, int semnum){
         sops.sem_flg = 0;
         if (semop(semid, &sops, 1) == -1) {
             if (errno != EINTR) {
-                printf("Error semop (%d)\n", errno);
+                printf("Error semReserve (%d)\n", errno);
                 exit(EXIT_FAILURE);
             }
         }
@@ -57,10 +57,19 @@ void semRelease(int semid, int semnum){
         sops.sem_flg = 0;
         if (semop(semid, &sops, 1) == -1) {
             if (errno != EINTR) {
-                printf("Error semop (%d)\n", errno);
+                printf("Error semRelease (%d)\n", errno);
                 exit(EXIT_FAILURE);
             }
         }
+}
+
+int semGetVal(int semid, int semnum){
+    int res;
+    if((res = semctl(semid, semnum, GETVAL, 0)) < 0){
+        printf("Error semGetVal (%d)\n", errno);
+        exit(EXIT_FAILURE);
+    }
+    return res;
 }
 
 /****

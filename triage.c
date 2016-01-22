@@ -32,9 +32,9 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 			idPaziente++; // gestire caso in cui superi il limite massimo
 
 			//printf("ATTENDO PERMESSO\n");
-			semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
-
-			if (!OSPEDALE_APERTO) break;
+			
+			//semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
+			//if (!OSPEDALE_APERTO) break;
 
 			char* sintomoRicevuto = persona.sintomo; 
 			int reparto, gravita;

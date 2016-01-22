@@ -19,6 +19,7 @@ void destroySem(int semid);
 void initSem(int semid, int semnum, int val);
 void semReserve(int semid, int semnum);
 void semRelease(int semid, int semnum);
+int semGetVal(int semid, int semnum);
 
 int createMsgQ(int key, bool attachIfExists);
 void destroyMsgQ(int msgqid);
