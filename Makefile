@@ -1,7 +1,14 @@
-CC=gcc
-CFLAGS=-c -Wall -pedantic
+OS=$(shell uname)
+ifeq ($(OS), Darwin)
+	CVERS=c99
+else
+	CVERS=gnu99
+endif
+
+CFLAGS=-c -Wall -pedantic -std=$(CVERS)
 LDFLAGS=
-SOURCES=hospital.c config.c comm.c pazienti.c triage.c reparto.c prestazione.c 
+CC=gcc
+SOURCES=$(wildcard *.c)
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=hospital
 

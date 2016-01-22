@@ -9,7 +9,7 @@ void prestazione(int msgqIDrep2pre, int IDPrestazione, int semPazienti){
 	struct paziente pazienteDaOperare;
 
 	while(OSPEDALE_APERTO){
-		if (recvMessage(msgqIDrep2pre, &pazienteDaOperare, 35, 0)) {
+		if (recvMessage(msgqIDrep2pre, &pazienteDaOperare, sizeof(pazienteDaOperare), (long) -11)) {
 			printf("[Prestazione %d] OPERO Paziente: %ld, Sintomo: %s, Gravita: %d\n", IDPrestazione, pazienteDaOperare.ID, pazienteDaOperare.sintomo, pazienteDaOperare.gravita);
 			int randomTime = getRand(1, 10);
 			//printf("\nTEMPO: %d\n", randomTime);
@@ -18,6 +18,6 @@ void prestazione(int msgqIDrep2pre, int IDPrestazione, int semPazienti){
 		} 
 	}
 
-	printf("[Prestazione %d] ** CHIUDO ** %d \n", IDPrestazione, semPazienti);
+	printf("[Prestazione %d] ** CHIUDO ** \n", IDPrestazione);
 
 }

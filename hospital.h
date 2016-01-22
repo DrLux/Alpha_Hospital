@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sys/sem.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <ctype.h>
 #include <sys/msg.h>
 #include <unistd.h>
@@ -11,6 +12,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <sys/ipc.h>
+#include <signal.h>
 
 extern bool OSPEDALE_APERTO;
 
@@ -21,7 +24,7 @@ struct cliente {
 }; 
 
 struct paziente {
-    long turno; /* usato come indice priorita nelle prestazioni */
+    long mtype; /* usato come indice priorita nelle prestazioni */
     unsigned long ID;
     int gravita;
     char* sintomo; /* Nome della malattia */

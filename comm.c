@@ -133,9 +133,7 @@ void sendMessage(int msgid, void *msg, int msgSize) {
     
 // Ottengo messaggi in base al tipo
 bool recvMessage(int msgid, void *msg, int msgSize, long msgtype) {
-    int dim = msgrcv(msgid, msg, msgSize - sizeof(long), msgtype, IPC_NOWAIT);
-    //printf("\n rcv: %d\n", dim);
-    if ( dim < 0){
+    if ( msgrcv(msgid, msg, msgSize - sizeof(long), msgtype, IPC_NOWAIT) < 0){
         if (errno == ENOMSG || errno == EINTR){
             return false;
         } else {
@@ -143,6 +141,7 @@ bool recvMessage(int msgid, void *msg, int msgSize, long msgtype) {
             exit(EXIT_FAILURE);
         }
     }
+    //printf("\ntype --> %ld\n", msgtype);
     return true;
 }
 

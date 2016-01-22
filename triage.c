@@ -23,7 +23,7 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 
 	struct cliente persona;
 	struct paziente nuovoPaziente;
-	nuovoPaziente.turno = 1;
+	nuovoPaziente.mtype = 1;
 
 	// ROUTINE TRIAGE PRINCIPALE
 	unsigned long idPaziente = 0; 

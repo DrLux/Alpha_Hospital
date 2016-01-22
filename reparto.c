@@ -24,6 +24,7 @@ void reparto(char* fifoPathTriage, int IDReparto, int semPazienti){
 	// ROUTINE PRINCIPALE REPARTI 
 	while (OSPEDALE_APERTO) { 
 		if(read(fifoIDTriage, &pazienteDaServire, sizeof(struct paziente)) > 0){
+			pazienteDaServire.mtype = (long) 11-pazienteDaServire.gravita;
 			printf("[Reparto %d] Paziente: %ld, Sintomo: %s, Gravita: %d\n", IDReparto, pazienteDaServire.ID, pazienteDaServire.sintomo, pazienteDaServire.gravita);
 			sendMessage(msgqIDPrestazione, &pazienteDaServire, sizeof(pazienteDaServire));
 			sleep(1); // a intervalli regolari

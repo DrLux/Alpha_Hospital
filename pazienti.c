@@ -5,7 +5,7 @@
 
 // genera messaggi relativi ai pazienti verso il triage
 void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sintomi){
-	printf("PAZIENTI AVVIATO (sem: %d)\n", semPazienti);
+	printf("PAZIENTI AVVIATO\n");
 
 
 	struct cliente persona;
