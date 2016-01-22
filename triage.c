@@ -40,7 +40,7 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 			int reparto, gravita;
 			// associo il sintomo al reparto e alla gravita corrispondente
 			getRepartoGravita(sintomi, sintomoRicevuto, &reparto, &gravita);
-			printf("[Triage] Sintomo: %s, Reparto: %d, Gravita': %d\n", sintomoRicevuto, reparto, gravita);
+			printf("[Triage] Paziente: %ld, Sintomo: %s, Reparto: %d, Gravita': %d\n", idPaziente, sintomoRicevuto, reparto, gravita);
 
 			if (reparto <= reparti){
 				// invio sulla code del reparto msgqIDReparti[NUM_REPARTO] il messaggio ricevuto

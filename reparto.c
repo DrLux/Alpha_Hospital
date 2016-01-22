@@ -11,6 +11,8 @@ void reparto(char* fifoPathTriage, int IDReparto, int semPazienti){
 	int fifoIDTriage = open(fifoPathTriage, O_RDONLY | O_NONBLOCK);
 	int msgqIDPrestazione = createMsgQ(getpid(), false);
 
+	//printf("[REPARTO %d] id coda: %d\n", IDReparto, msgqIDPrestazione);
+
 	int pid = fork();
 	if (!pid) {
 		prestazione(msgqIDPrestazione, IDReparto, semPazienti);
@@ -27,13 +29,9 @@ void reparto(char* fifoPathTriage, int IDReparto, int semPazienti){
 		if(read(fifoIDTriage, &pazienteDaServire, sizeof(struct paziente)) > 0){
 
 			printf("[Reparto %d] Paziente: %ld, Sintomo: %s, Gravita: %d\n", IDReparto, pazienteDaServire.ID, pazienteDaServire.sintomo, pazienteDaServire.gravita);
-			
-			/*
-			if (recvMessage(msgqIDtri2rep, paz_rep, 0)) //se ci sono pazienti in lista di attesa
-				sendMessage(msgqIDrep2pre, paz_rep, (int)strlen((*paz_rep).malattia));// lo manda alla prestazione con priorità (msgqIDrep2pre)
-			else	if (GLOBAL_SWITCH == 1) //controlla che l' ospedale sia chiuso
-						open = false;
-			*/
+
+			sendMessage(msgqIDPrestazione, &pazienteDaServire, sizeof(pazienteDaServire));
+
 			sleep(1); // a intervalli regolari
 		} 
 	}
