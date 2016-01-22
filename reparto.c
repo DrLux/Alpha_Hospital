@@ -1,6 +1,6 @@
 #include "hospital.h"
-#include "reparto.h"
 #include "comm.h"
+#include "reparto.h"
 
 
 void reparto(char* fifoPathTriage, int IDReparto, int semPazienti){
@@ -19,20 +19,13 @@ void reparto(char* fifoPathTriage, int IDReparto, int semPazienti){
 		exit(EXIT_SUCCESS);
 	}
 
-	
-	// ROUTINE PRINCIPALE REPARTI 
 	struct paziente pazienteDaServire;
-	//bool open = true;
-	
+
+	// ROUTINE PRINCIPALE REPARTI 
 	while (OSPEDALE_APERTO) { 
-
 		if(read(fifoIDTriage, &pazienteDaServire, sizeof(struct paziente)) > 0){
-
 			printf("[Reparto %d] Paziente: %ld, Sintomo: %s, Gravita: %d\n", IDReparto, pazienteDaServire.ID, pazienteDaServire.sintomo, pazienteDaServire.gravita);
-
-			printf("++++ RICEVUTO ++++ %ld\n", pazienteDaServire.turno);
 			sendMessage(msgqIDPrestazione, &pazienteDaServire, sizeof(pazienteDaServire));
-			printf("++++ INVIATO ++++\n");
 			sleep(1); // a intervalli regolari
 		} 
 	}

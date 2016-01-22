@@ -1,4 +1,5 @@
 #include "hospital.h"
+#include "comm.h"
 #include "triage.h"
 
 

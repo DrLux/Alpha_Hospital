@@ -67,6 +67,28 @@ int semGetVal(int semid, int semnum){
     int res;
     if((res = semctl(semid, semnum, GETVAL, 0)) < 0){
         printf("Error semGetVal (%d)\n", errno);
+
+        switch (errno){
+            /*case EACCESS:
+                printf("EACCESS (permission denied)\n"); 
+                break;*/
+            case EFAULT:
+                printf("EFAULT (invalid address pointed to by arg argument)\n");
+                break;
+            case EIDRM:
+                printf("EIDRM (semaphore set was removed)\n");
+                break;
+            case EINVAL:
+                printf("EINVAL (set doesn't exist, or semid is invalid)\n");
+                break;
+            case EPERM:
+                printf("EPERM (EUID has no privileges for cmd in arg)\n");
+                break;
+            case ERANGE:
+                printf("ERANGE (semaphore value out of range)\n");
+                break;                 
+        }
+
         exit(EXIT_FAILURE);
     }
     return res;
@@ -101,7 +123,7 @@ void destroyMsgQ(int msgqid){
 
 // Scrivo messaggi in coda
 void sendMessage(int msgid, void *msg, int msgSize) {
-    if (msgsnd(msgid, msg, msgSize, 0) == -1){ // METTERLA NO WAIT E TORNARE TRUE SE MANDATO, FALSE SE NON MANDATO (CODA PIENA)
+    if (msgsnd(msgid, msg, msgSize - sizeof(long), 0) == -1){ // METTERLA NO WAIT E TORNARE TRUE SE MANDATO, FALSE SE NON MANDATO (CODA PIENA)
         if (errno != EINTR) {
             printf("Error msgsnd (%d)\n", errno);    
             exit(EXIT_FAILURE);
@@ -111,7 +133,9 @@ void sendMessage(int msgid, void *msg, int msgSize) {
     
 // Ottengo messaggi in base al tipo
 bool recvMessage(int msgid, void *msg, int msgSize, long msgtype) {
-    if (msgrcv(msgid, msg, msgSize, msgtype, IPC_NOWAIT) < 0){
+    int dim = msgrcv(msgid, msg, msgSize - sizeof(long), msgtype, IPC_NOWAIT);
+    //printf("\n rcv: %d\n", dim);
+    if ( dim < 0){
         if (errno == ENOMSG || errno == EINTR){
             return false;
         } else {

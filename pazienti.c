@@ -1,7 +1,7 @@
 #include "hospital.h"
 #include "config.h"
-#include "pazienti.h"
 #include "comm.h"
+#include "pazienti.h"
 
 // genera messaggi relativi ai pazienti verso il triage
 void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sintomi){
@@ -13,7 +13,6 @@ void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sin
 
 	int i=0;
 	while(OSPEDALE_APERTO){
-		//semReserve(semPazienti, 0);
 		semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
 		if (!OSPEDALE_APERTO) break;
 
