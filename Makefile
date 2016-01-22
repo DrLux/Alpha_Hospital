@@ -1,8 +1,8 @@
 OS=$(shell uname)
-ifeq ($(OS), Darwin)
-	CVERS=c99
-else
+ifeq ($(OS), Linux)
 	CVERS=gnu99
+else
+	CVERS=c99
 endif
 
 CFLAGS=-c -Wall -pedantic -std=$(CVERS)
