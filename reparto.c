@@ -28,7 +28,10 @@ void reparto(char* fifoPathTriage, int IDReparto, int semPazienti){
 			printf("[Reparto %d] Paziente: %ld, Sintomo: %s, Gravita: %d\n", IDReparto, pazienteDaServire.ID, pazienteDaServire.sintomo, pazienteDaServire.gravita);
 			sendMessage(msgqIDPrestazione, &pazienteDaServire, sizeof(pazienteDaServire));
 			sleep(1); // a intervalli regolari
-		} 
+		} else {
+			if (OSPEDALE_IN_CHIUSURA)
+				OSPEDALE_APERTO = false;
+		}
 	}
 
 	printf("[Reparto %d] ** ATTENDO FIGLI **\n", IDReparto);

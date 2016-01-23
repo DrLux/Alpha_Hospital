@@ -12,32 +12,18 @@ void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sin
 	persona.mtype = 1;
 
 	int i=0;
-	while(OSPEDALE_APERTO){
+	//while(OSPEDALE_APERTO){
+	while(OSPEDALE_APERTO && !OSPEDALE_IN_CHIUSURA){
 		semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
-		if (!OSPEDALE_APERTO) break;
+		//if (OSPEDALE_APERTO) {
+		if (OSPEDALE_APERTO && !OSPEDALE_IN_CHIUSURA) {
 
-		persona.sintomo = getSintomoRandom(sintomi);
-		printf("[Pazienti %d] %s\n", i, persona.sintomo); // scommenta per vedere pazienti generati
-		sendMessage(msgqIDgp2tri, &persona, sizeof(persona));
-		i++;
-	}
-
-/*
-	bool genereteNewClient = true;
-	while(OSPEDALE_APERTO){
-		if (genereteNewClient){
-			persona.sintomo = getSintomoRantom(sintomi);
+			persona.sintomo = getSintomoRandom(sintomi);
 			printf("[Pazienti %d] %s\n", i, persona.sintomo); // scommenta per vedere pazienti generati
-		}
-
-		if( sendMessage(msgqIDgp2tri, &persona, sizeof(persona)) ) {
-			genereteNewClient = true;
+			sendMessage(msgqIDgp2tri, &persona, sizeof(persona));
 			i++;
-		} else {
-			genereteNewClient = false;
 		}
 	}
-	*/
 
 	printf("[Pazienti] ** CHIUDO **\n");
 
@@ -123,9 +109,6 @@ char* getSintomoRandom(struct elencoSintomi* sintomi){
 	int maxRandom = (*sintomi).numSintomi-1;
 	int random = getRand(0, maxRandom);
 	char* sintomoRandom = (*(*sintomi).arraySintomi[random]).sintomo;
-	//char* sintomo = (char*) malloc(sizeof(char)*strlen(sintomoRandom)+1);
-	//strcpy(sintomo, sintomoRandom);
-	//return sintomo;
 	return sintomoRandom;
 }
 

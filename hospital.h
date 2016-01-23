@@ -16,6 +16,7 @@
 #include <signal.h>
 
 extern bool OSPEDALE_APERTO;
+extern bool OSPEDALE_IN_CHIUSURA;
 
 //struttura che definisce il paziente
 struct cliente {

@@ -1,11 +1,8 @@
 #include "hospital.h"
 #include "config.h"
 #include "comm.h"
-
 #include "triage.h"
-
 #include "pazienti.h"
-//#include "cartellaPaziente.h"
 
 #define DEFAULT_PAZIENTI 10
 #define DEFAULT_REPARTI 2
@@ -21,13 +18,28 @@ void sigquit_handler(int signum){
     }
 }
 
+bool OSPEDALE_IN_CHIUSURA = false;
+void sigalarm_handler(int signum){
+    if (signum == SIGALRM){
+        OSPEDALE_IN_CHIUSURA = true;
+    }
+}
+
+void sigalarm_handler_propagate(int signum){
+    if (signum == SIGALRM){
+        printf("[Hospital] tempo scaduto, chiudo l'ospedale\n");
+        if (signal(SIGALRM, sigalarm_handler) == SIG_ERR) 
+            printf("signal (SIGALARM) error");
+        kill(-getpid(), SIGALRM);
+    }
+}
+
 
 int main(int argc, char* argv[]){
 
     srand(getpid());
     //setbuf(stdout, NULL);
 
-    //srand(time(NULL));
     // inizializzazione di default delle variabili
     int numPazienti = DEFAULT_PAZIENTI,
     numReparti = DEFAULT_REPARTI,
@@ -38,35 +50,10 @@ int main(int argc, char* argv[]){
     printf("Reparti: %d\n", numReparti);
     printf("Tempo: %d\n", maxTempo);
 
-
-
-
     
+    // creazione elenco "sintomi <--> reparto <--> gravita"
     struct elencoSintomi* sintomi = NULL;
     loadSintomi(&sintomi);
-
-    //printf("Sintomi: %d\n", (*sintomi).numSintomi);
-
-    //int i;
-    //for (i=0; i<(*sintomi).numSintomi; i++) {
-    //    printf("[Parsed] %s, %d, %d\n", (*(*sintomi).arraySintomi[i]).sintomo, (*(*sintomi).arraySintomi[i]).reparto, (*(*sintomi).arraySintomi[i]).gravita);
-    //}
-
-    /*
-    int a;
-    for (a=0; a<5; a++) {
-        //printf("[%d] %s, %d, %d\n", a, malattie[a]->sintomo, malattie[a]->reparto, malattie[a]->gravita);
-        printf("[%d] %s, %d, %d\n", 4, (*malattie[a]).sintomo, (*malattie[a]).reparto, (*malattie[a]).gravita);
-    }
-
-    for (a=0; a<5; a++) {
-        free((*malattie[a]).sintomo);
-        free(malattie[a]);
-    }
-    free(malattie);
-    */
-    //loadMalattie();
-    /*END TEST */
 
 
     //creazione e inizializzazione semaforo numero massimo pazienti
@@ -74,19 +61,15 @@ int main(int argc, char* argv[]){
     initSem(semIDnumPazienti, 0, numPazienti);
     //creazione coda di messaggi da generatore pazienti verso triage
     int msgqIDgp2tri = createMsgQ(KEY_MSG_GP2TRI, false);
-    //struct msqid_ds queue_ds;
-    //getInfo(msgqIDgp2tri, &queue_ds);
 
 
+    // settaggio handler SIGQUIT e SIGALRM (le "ereditano" tutti i figli)
     if (signal(SIGQUIT, sigquit_handler) == SIG_ERR) 
         printf("signal (SIGQUIT) error");
-    /*
-    //creazione Handler per la SIGALARM
-    if (signal(SIGALRM, chiusuraOspedale) == SIG_ERR) //sigalarm = 14
-        printf("signal (SIG_ERR) error");
-    //inizializzazione timer per la SIGALARM
-    alarm(maxTempo);
-    */
+    if (signal(SIGALRM, sigalarm_handler) == SIG_ERR) 
+        printf("signal (SIGALARM) error");
+
+
 
     //creo il triage
     pid_t pidTriage = fork();
@@ -96,7 +79,6 @@ int main(int argc, char* argv[]){
         exit(EXIT_SUCCESS);
     }
 
-
     //creo il generatore di pazienti
     pid_t pidGenPaz = fork();
     if (!pidGenPaz) {
@@ -105,22 +87,28 @@ int main(int argc, char* argv[]){
     }
 
 
-    // aspetto maxTempo secondi e poi mando una SIGALARM per terminare tutto
+    // setto l'handler (solo per il padre) per propagare la SIGALRM ai figli
+    if (signal(SIGALRM, sigalarm_handler_propagate) == SIG_ERR) 
+        printf("signal (SIGALARM) error");
 
-    //sleep(maxTempo);
+    
+    //inizializzazione timer per la SIGALARM
+    alarm(maxTempo);
 
-    while(OSPEDALE_APERTO){
+
+    // ospedale operativo
+    while(OSPEDALE_APERTO && !OSPEDALE_IN_CHIUSURA){
         sleep(1);
     }
 
-    //while(wait(NULL) != -1);
+
     printf("[Hospital] ** ATTENDO FIGLI **\n");
-
+    // aspetto che muoiano tutti i figli prima di liberare le risorse
     waitAllChild();
-
     printf("[Hospital] ** CHIUDO **\n");
 
-    // libero memoria sintomi (forse da spostare se questo main termina prima di triage)
+
+    // libero memoria sintomi 
     int i;
     for (i=0; i<(*sintomi).numSintomi; i++) {
         free((*(*sintomi).arraySintomi[i]).sintomo);
@@ -129,19 +117,9 @@ int main(int argc, char* argv[]){
     free((*sintomi).arraySintomi);
     free(sintomi);
 
+    // distruggo coda fra pazienti e triage e semaforo
     destroyMsgQ(msgqIDgp2tri);
     destroySem(semIDnumPazienti);
 }
 
 
-
-/*
-//CHIEDERE DOVE METTERE QUESTO PROTOTIPO
-static void chiusuraOspedale(int sig){
-    if (sig == SIGALRM)
-      GLOBAL_SWITCH = 1;
-    if (sig == SIGQUIT)
-      GLOBAL_SWITCH = 2;
-    return;
-}
-*/

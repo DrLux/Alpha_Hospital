@@ -1,16 +1,25 @@
 #include "hospital.h"
 #include "comm.h"
 #include "triage.h"
+#include <math.h>
+
+#define FIFO_PATH_FOLDER "fifos\0"
+#define FIFO_BASE_NAME "fifo\0"
 
 
 void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi* sintomi){
 	printf("TRIAGE AVVIATO\n");
 
+	// creo array che conterra' i puntatori ai file aperti per ogni reparto
+	int* fifoIDReparti = (int*) malloc(reparti*sizeof(int)); 
 
-	int* fifoIDReparti = (int*) malloc(reparti*sizeof(int));
-	char fifoPathReparto[] = "fifos/fifo00\0";
-	int IDReparto = 0;
+	int charsNum = (int)log10(reparti)+1; // calcolo quanti carattri servono per rappresentare il numero massimo dei reparto
+	int basePathLen = strlen(FIFO_PATH_FOLDER) + 1 + strlen(FIFO_BASE_NAME) + charsNum; // fifos/fifoNN
+	// creo stringa contenente path per ogni reparto
+	char* fifoPathReparto = (char*) malloc((basePathLen+1)*sizeof(char)); // +1 per terminatore stringa
 
+
+	int IDReparto = 0; // modifico il valore di IDReparto in createChildsWithFifo, cosi ogni reparto ha il proprio id dopo essere stato creato
 	// generazione reparti e relative code messaggi
 	bool isChild = createChildsWithFifo(reparti, fifoIDReparti, fifoPathReparto, &IDReparto);
 	if (isChild) { // routine reparti
@@ -27,15 +36,11 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 
 	// ROUTINE TRIAGE PRINCIPALE
 	unsigned long idPaziente = 0; 
-	while(OSPEDALE_APERTO){
+	//while(OSPEDALE_APERTO){
+	while(OSPEDALE_APERTO && !OSPEDALE_IN_CHIUSURA){
 		if (recvMessage(msgqPazienti, &persona, sizeof(persona), 0)) { // se ho ricevuto un messaggio
 
 			idPaziente++; // gestire caso in cui superi il limite massimo
-
-			//printf("ATTENDO PERMESSO\n");
-			
-			//semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
-			//if (!OSPEDALE_APERTO) break;
 
 			char* sintomoRicevuto = persona.sintomo; 
 			int reparto, gravita;
@@ -65,20 +70,21 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 
 	// pulisco memoria e code messaggi // DA RIFARE CON FIFO
 	removeFifos(reparti, fifoIDReparti, fifoPathReparto);
+	free(fifoPathReparto);
 	free(fifoIDReparti);
 }
 
 
-// crea tanti figli quanti sono i reparti e ad ognuno crea e passa una coda di messaggi // DA RIFARE CON FIFO
+// crea tanti figli quanti sono i reparti e ad ognuno crea e passa una coda di messaggi 
 bool createChildsWithFifo(int n, int* fifoids, char* repfifopath, int* repid){
-	mkdir("fifos", 0700);
+	mkdir(FIFO_PATH_FOLDER, 0700);
 	bool isChild = false;
 	int i;
 	for (i=0; i<n && !isChild; i++) {
 
 		*repid = i+1;
-		sprintf(repfifopath, "fifos/fifo%d", *repid);
-		//printf("%s\n", repfifopath);
+		sprintf(repfifopath, "%s/%s%d", FIFO_PATH_FOLDER, FIFO_BASE_NAME, *repid); // fifos/fifoNN
+		//printf("%s\n", repfifopath); // commentare
 		mkfifo(repfifopath, 0600);
 		
 		if(!fork())
@@ -94,11 +100,12 @@ void removeFifos(int n, int* fifoids, char* repfifopath){
 	int i;
 	for (i=0; i<n; i++) {
 		close(fifoids[i]);
-		sprintf(repfifopath, "fifos/fifo%d", i+1);
+		sprintf(repfifopath, "%s/%s%d", FIFO_PATH_FOLDER, FIFO_BASE_NAME, i+1); // fifos/fifoNN
 		unlink(repfifopath);
 	}
-	rmdir("fifos");
+	rmdir(FIFO_PATH_FOLDER);
 }
+
 
 // ottiene il reparto e la gravita corrispondenti a un sintomo
 void getRepartoGravita(struct elencoSintomi* sintomi, char* sintomoRicevuto, int* reparto, int* gravita){

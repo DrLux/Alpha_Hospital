@@ -1,0 +1,244 @@
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+PAZIENTI AVVIATO
+[Pazienti 0] malattiaD
+[Pazienti 1] malattiaH
+[Pazienti 2] malattiaG
+[Pazienti 3] malattiaI
+[Pazienti 4] malattiaG
+[Pazienti 5] malattiaA
+[Pazienti 6] malattiaE
+[Pazienti 7] malattiaL
+[Pazienti 8] malattiaE
+[Pazienti 9] malattiaA
+[Pazienti 10] malattiaA
+[Pazienti 11] malattiaF
+[Pazienti 12] malattiaD
+[Pazienti 13] malattiaD
+[Pazienti 14] malattiaB
+[Pazienti 15] malattiaI
+[Pazienti 16] malattiaB
+[Pazienti 17] malattiaH
+[Pazienti 18] malattiaA
+[Pazienti 19] malattiaC
+[Pazienti 20] malattiaC
+[Pazienti 21] malattiaE
+[Pazienti] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 1 AVVIATO
+PRESTAZIONE 1 AVVIATO
+[Prestazione 1] OPERO Paziente: 6, Sintomo: malattiaA, Gravita: 7 (Secondi: 1)
+[Prestazione 1] OPERO Paziente: 10, Sintomo: malattiaA, Gravita: 7 (Secondi: 2)
+[Prestazione 1] OPERO Paziente: 11, Sintomo: malattiaA, Gravita: 7 (Secondi: 1)
+[Prestazione 1] OPERO Paziente: 19, Sintomo: malattiaA, Gravita: 7 (Secondi: 5)
+[Prestazione 1] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 1 AVVIATO
+[Reparto 1] Paziente: 6, Sintomo: malattiaA, Gravita: 7
+[Reparto 1] Paziente: 10, Sintomo: malattiaA, Gravita: 7
+[Reparto 1] Paziente: 11, Sintomo: malattiaA, Gravita: 7
+[Reparto 1] Paziente: 19, Sintomo: malattiaA, Gravita: 7
+[Reparto 1] ** ATTENDO FIGLI **
+[Reparto 1] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 5 AVVIATO
+PRESTAZIONE 5 AVVIATO
+[Prestazione 5] OPERO Paziente: 7, Sintomo: malattiaE, Gravita: 1 (Secondi: 1)
+[Prestazione 5] OPERO Paziente: 9, Sintomo: malattiaE, Gravita: 1 (Secondi: 2)
+[Prestazione 5] OPERO Paziente: 22, Sintomo: malattiaE, Gravita: 1 (Secondi: 4)
+[Prestazione 5] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 3 AVVIATO
+PRESTAZIONE 3 AVVIATO
+[Prestazione 3] OPERO Paziente: 20, Sintomo: malattiaC, Gravita: 5 (Secondi: 4)
+[Prestazione 3] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 5 AVVIATO
+[Reparto 5] Paziente: 7, Sintomo: malattiaE, Gravita: 1
+[Reparto 5] Paziente: 9, Sintomo: malattiaE, Gravita: 1
+[Reparto 5] Paziente: 22, Sintomo: malattiaE, Gravita: 1
+[Reparto 5] ** ATTENDO FIGLI **
+[Reparto 5] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 9 AVVIATO
+PRESTAZIONE 9 AVVIATO
+[Prestazione 9] OPERO Paziente: 4, Sintomo: malattiaI, Gravita: 8 (Secondi: 3)
+[Prestazione 9] OPERO Paziente: 16, Sintomo: malattiaI, Gravita: 8 (Secondi: 1)
+[Prestazione 9] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 8 AVVIATO
+PRESTAZIONE 8 AVVIATO
+[Prestazione 8] OPERO Paziente: 2, Sintomo: malattiaH, Gravita: 4 (Secondi: 3)
+[Prestazione 8] OPERO Paziente: 18, Sintomo: malattiaH, Gravita: 4 (Secondi: 1)
+[Prestazione 8] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 10 AVVIATO
+PRESTAZIONE 10 AVVIATO
+[Prestazione 10] OPERO Paziente: 8, Sintomo: malattiaL, Gravita: 6 (Secondi: 4)
+[Prestazione 10] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 8 AVVIATO
+[Reparto 8] Paziente: 2, Sintomo: malattiaH, Gravita: 4
+[Reparto 8] Paziente: 18, Sintomo: malattiaH, Gravita: 4
+[Reparto 8] ** ATTENDO FIGLI **
+[Reparto 8] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 10 AVVIATO
+[Reparto 10] Paziente: 8, Sintomo: malattiaL, Gravita: 6
+[Reparto 10] ** ATTENDO FIGLI **
+[Reparto 10] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 6 AVVIATO
+PRESTAZIONE 6 AVVIATO
+[Prestazione 6] OPERO Paziente: 12, Sintomo: malattiaF, Gravita: 2 (Secondi: 1)
+[Prestazione 6] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 9 AVVIATO
+[Reparto 9] Paziente: 4, Sintomo: malattiaI, Gravita: 8
+[Reparto 9] Paziente: 16, Sintomo: malattiaI, Gravita: 8
+[Reparto 9] ** ATTENDO FIGLI **
+[Reparto 9] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 6 AVVIATO
+[Reparto 6] Paziente: 12, Sintomo: malattiaF, Gravita: 2
+[Reparto 6] ** ATTENDO FIGLI **
+[Reparto 6] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 3 AVVIATO
+[Reparto 3] Paziente: 20, Sintomo: malattiaC, Gravita: 5
+[Reparto 3] Paziente: 21, Sintomo: malattiaC, Gravita: 5
+[Reparto 3] ** ATTENDO FIGLI **
+[Reparto 3] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 7 AVVIATO
+PRESTAZIONE 7 AVVIATO
+[Prestazione 7] OPERO Paziente: 3, Sintomo: malattiaG, Gravita: 10 (Secondi: 5)
+[Prestazione 7] OPERO Paziente: 5, Sintomo: malattiaG, Gravita: 10 (Secondi: 3)
+[Prestazione 7] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 4 AVVIATO
+PRESTAZIONE 4 AVVIATO
+[Prestazione 4] OPERO Paziente: 1, Sintomo: malattiaD, Gravita: 9 (Secondi: 3)
+[Prestazione 4] OPERO Paziente: 13, Sintomo: malattiaD, Gravita: 9 (Secondi: 3)
+[Prestazione 4] OPERO Paziente: 14, Sintomo: malattiaD, Gravita: 9 (Secondi: 3)
+[Prestazione 4] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 7 AVVIATO
+[Reparto 7] Paziente: 3, Sintomo: malattiaG, Gravita: 10
+[Reparto 7] Paziente: 5, Sintomo: malattiaG, Gravita: 10
+[Reparto 7] ** ATTENDO FIGLI **
+[Reparto 7] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 4 AVVIATO
+[Reparto 4] Paziente: 1, Sintomo: malattiaD, Gravita: 9
+[Reparto 4] Paziente: 13, Sintomo: malattiaD, Gravita: 9
+[Reparto 4] Paziente: 14, Sintomo: malattiaD, Gravita: 9
+[Reparto 4] ** ATTENDO FIGLI **
+[Reparto 4] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 2 AVVIATO
+PRESTAZIONE 2 AVVIATO
+[Prestazione 2] OPERO Paziente: 15, Sintomo: malattiaB, Gravita: 3 (Secondi: 5)
+[Prestazione 2] OPERO Paziente: 17, Sintomo: malattiaB, Gravita: 3 (Secondi: 4)
+[Prestazione 2] ** CHIUDO ** 
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+REPARTO 2 AVVIATO
+[Reparto 2] Paziente: 15, Sintomo: malattiaB, Gravita: 3
+[Reparto 2] Paziente: 17, Sintomo: malattiaB, Gravita: 3
+[Reparto 2] ** ATTENDO FIGLI **
+[Reparto 2] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+TRIAGE AVVIATO
+[Triage] Paziente: 1, Sintomo: malattiaD, Reparto: 4, Gravita': 9
+[Triage] Paziente: 2, Sintomo: malattiaH, Reparto: 8, Gravita': 4
+[Triage] Paziente: 3, Sintomo: malattiaG, Reparto: 7, Gravita': 10
+[Triage] Paziente: 4, Sintomo: malattiaI, Reparto: 9, Gravita': 8
+[Triage] Paziente: 5, Sintomo: malattiaG, Reparto: 7, Gravita': 10
+[Triage] Paziente: 6, Sintomo: malattiaA, Reparto: 1, Gravita': 7
+[Triage] Paziente: 7, Sintomo: malattiaE, Reparto: 5, Gravita': 1
+[Triage] Paziente: 8, Sintomo: malattiaL, Reparto: 10, Gravita': 6
+[Triage] Paziente: 9, Sintomo: malattiaE, Reparto: 5, Gravita': 1
+[Triage] Paziente: 10, Sintomo: malattiaA, Reparto: 1, Gravita': 7
+[Triage] Paziente: 11, Sintomo: malattiaA, Reparto: 1, Gravita': 7
+[Triage] Paziente: 12, Sintomo: malattiaF, Reparto: 6, Gravita': 2
+[Triage] Paziente: 13, Sintomo: malattiaD, Reparto: 4, Gravita': 9
+[Triage] Paziente: 14, Sintomo: malattiaD, Reparto: 4, Gravita': 9
+[Triage] Paziente: 15, Sintomo: malattiaB, Reparto: 2, Gravita': 3
+[Triage] Paziente: 16, Sintomo: malattiaI, Reparto: 9, Gravita': 8
+[Triage] Paziente: 17, Sintomo: malattiaB, Reparto: 2, Gravita': 3
+[Triage] Paziente: 18, Sintomo: malattiaH, Reparto: 8, Gravita': 4
+[Triage] Paziente: 19, Sintomo: malattiaA, Reparto: 1, Gravita': 7
+[Triage] Paziente: 20, Sintomo: malattiaC, Reparto: 3, Gravita': 5
+[Triage] Paziente: 21, Sintomo: malattiaC, Reparto: 3, Gravita': 5
+[Triage] Paziente: 22, Sintomo: malattiaE, Reparto: 5, Gravita': 1
+[Triage] ** ATTENDO FIGLI **
+[Triage] ** CHIUDO **
+Pazienti: 10
+Reparti: 10
+Tempo: 5
+[Hospital] tempo scaduto, chiudo l'ospedale
+[Hospital] ** ATTENDO FIGLI **
+[Hospital] ** CHIUDO **

@@ -20,13 +20,15 @@ void prestazione(int msgqIDrep2pre, int IDPrestazione, int semPazienti){
 
 		if (recvMessage(msgqIDrep2pre, &pazienteDaOperare, sizeof(pazienteDaOperare), priority)) {
 			starvation++;
-			printf("[Prestazione %d] OPERO Paziente: %ld, Sintomo: %s, Gravita: %d\n", IDPrestazione, pazienteDaOperare.ID, pazienteDaOperare.sintomo, pazienteDaOperare.gravita);
 			int randomTime = getRand(1,5);
-			//printf("\nTEMPO: %d\n", randomTime);
+			printf("[Prestazione %d] OPERO Paziente: %ld, Sintomo: %s, Gravita: %d (Secondi: %d)\n", IDPrestazione, pazienteDaOperare.ID, pazienteDaOperare.sintomo, pazienteDaOperare.gravita, randomTime);
 			sleep(randomTime); 
 			semRelease(semPazienti, 0);
 		} else {
 			starvation = 0; // se non c'e' nessun paziente in coda resetto la gestione della starvation
+			
+			if (OSPEDALE_IN_CHIUSURA)
+				OSPEDALE_APERTO = false;
 		}
 	}
 
