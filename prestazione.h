@@ -1,2 +1,3 @@
 
-void prestazione(int msgqIDrep2pre, int IDPrestazione, int semPazienti);
+// funzione principale delle prestazioni
+void prestazione(int msgqIDReparto, int IDPrestazione, int semPazienti);

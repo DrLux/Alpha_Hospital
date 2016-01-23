@@ -10,7 +10,7 @@ FUNZIONI RELATIVE AI SEMAFORI
 int createSem(int key, int num){
     int semid;
     if ((semid = semget((key_t) key, num, 0600 | IPC_CREAT | IPC_EXCL)) == -1){ 
-        if (errno == EEXIST){ // se il semaforo Ë gi‡ stato creato
+        if (errno == EEXIST){ // se il semaforo √® gi√† stato creato
             semid = semget((key_t) key, num, 0600); //si limita a prendere l' id di quel semaforo
         }
     }
@@ -63,6 +63,7 @@ void semRelease(int semid, int semnum){
         }
 }
 
+//ottiene il valore del semaforo
 int semGetVal(int semid, int semnum){
     int res;
     if((res = semctl(semid, semnum, GETVAL, 0)) < 0){
@@ -119,11 +120,15 @@ bool recvMessage(int msgid, void *msg, int msgSize, long msgtype) {
             exit(EXIT_FAILURE);
         }
     }
-    //printf("\ntype --> %ld\n", msgtype);
     return true;
 }
 
+/***
+MISC
+***/
 
+
+// aspetta che muoiano tutti i figli di un processo
 void waitAllChild(){
     while (waitpid(-1, NULL, 0)) {
        if (errno == ECHILD) {
@@ -133,6 +138,7 @@ void waitAllChild(){
 }
 
 
+// genera un numero random compreso tra min_num e max_num (compresi)
 int getRand(int min_num, int max_num){
     int low_num=0, hi_num=0;
     if (min_num<max_num) {

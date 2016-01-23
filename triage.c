@@ -32,31 +32,31 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 
 	struct cliente persona;
 	struct paziente nuovoPaziente;
-	nuovoPaziente.mtype = 1;
 
 	// ROUTINE TRIAGE PRINCIPALE
 	unsigned long idPaziente = 0; 
-	//while(OSPEDALE_APERTO){
 	while(OSPEDALE_APERTO && !OSPEDALE_IN_CHIUSURA){
-		if (recvMessage(msgqPazienti, &persona, sizeof(persona), 0)) { // se ho ricevuto un messaggio
+		// prenso un nuovo cliente dalla coda generatore pazienti
+		if (recvMessage(msgqPazienti, &persona, sizeof(persona), 0)) { 
 
-			idPaziente++; // gestire caso in cui superi il limite massimo
+			idPaziente++; // genero ID paziente 
 
-			char* sintomoRicevuto = persona.sintomo; 
+			char* sintomoRicevuto = persona.sintomo; // ottengo il sintomo del cliente
 			int reparto, gravita;
-			// associo il sintomo al reparto e alla gravita corrispondente
-			getRepartoGravita(sintomi, sintomoRicevuto, &reparto, &gravita);
+			getRepartoGravita(sintomi, sintomoRicevuto, &reparto, &gravita);// associo il sintomo al reparto e alla gravita corrispondente
+			// PRINT INFO
 			printf("[Triage] Paziente: %ld, Sintomo: %s, Reparto: %d, Gravita': %d\n", idPaziente, sintomoRicevuto, reparto, gravita);
 
-			if (reparto <= reparti){
-				// invio sulla code del reparto msgqIDReparti[NUM_REPARTO] il messaggio ricevuto
-				// sendFifo -> reparto, priorita 
+
+			if (reparto <= reparti){ // se il reparto esiste invio il paziente
 				nuovoPaziente.ID = idPaziente;
 				nuovoPaziente.gravita = gravita;
 				nuovoPaziente.sintomo = sintomoRicevuto;
+				// invio sul fifo del reparto corrispondente il nuovo paziente
 				write(fifoIDReparti[reparto-1], &nuovoPaziente, sizeof(struct paziente));
-			} else {
-				printf("[Triage] Reparto: %d inesistente! NON servo il paziente\n", reparto);
+			} else { // se il reparto NON esiste NON servo il paziente
+				printf("[Triage] Reparto: %d inesistente! NON servo il paziente %ld\n", reparto, idPaziente);
+				// incremento semaforo pazienti
 				semRelease(semPazienti, 0);
 			}
 			
@@ -64,7 +64,7 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 	}
 
 	printf("[Triage] ** ATTENDO FIGLI **\n");
-	waitAllChild();
+	waitAllChild(); // aspetto che muoiano tutti i figli prima di liberare le risorse
 	printf("[Triage] ** CHIUDO **\n");
 
 
@@ -77,20 +77,19 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 
 // crea tanti figli quanti sono i reparti e ad ognuno crea e passa una coda di messaggi 
 bool createChildsWithFifo(int n, int* fifoids, char* repfifopath, int* repid){
-	mkdir(FIFO_PATH_FOLDER, 0700);
+	mkdir(FIFO_PATH_FOLDER, 0700); // creo la cartella che conterra' i fifo
 	bool isChild = false;
 	int i;
 	for (i=0; i<n && !isChild; i++) {
 
 		*repid = i+1;
 		sprintf(repfifopath, "%s/%s%d", FIFO_PATH_FOLDER, FIFO_BASE_NAME, *repid); // fifos/fifoNN
-		//printf("%s\n", repfifopath); // commentare
-		mkfifo(repfifopath, 0600);
+		mkfifo(repfifopath, 0600); // creo i fifo
 		
-		if(!fork())
-			isChild = true;
+		if(!fork()) // genero i reparti
+			isChild = true; // se non un figlio (reparto) esco e ritorno true
 		else {
-			fifoids[i] = open(repfifopath, O_WRONLY);
+			fifoids[i] = open(repfifopath, O_WRONLY); // apro in scrittura i fifo e salvo i puntatori nell'array
 		}
 	}
 	return isChild;
@@ -99,11 +98,11 @@ bool createChildsWithFifo(int n, int* fifoids, char* repfifopath, int* repid){
 void removeFifos(int n, int* fifoids, char* repfifopath){
 	int i;
 	for (i=0; i<n; i++) {
-		close(fifoids[i]);
+		close(fifoids[i]); // chiudo i fifo (aperti in scrittura)
 		sprintf(repfifopath, "%s/%s%d", FIFO_PATH_FOLDER, FIFO_BASE_NAME, i+1); // fifos/fifoNN
-		unlink(repfifopath);
+		unlink(repfifopath); // elimino i fifo
 	}
-	rmdir(FIFO_PATH_FOLDER);
+	rmdir(FIFO_PATH_FOLDER); // elimino la cartella che conteneva i fifo
 }
 
 
@@ -112,10 +111,9 @@ void getRepartoGravita(struct elencoSintomi* sintomi, char* sintomoRicevuto, int
 	int i;
 	for (i=0; i<(*sintomi).numSintomi; i++) {
 		// stessa cosa se si fa la string compare o il confronto fra gli indirizzi dato che puntano alla stessa struttura nella heap
-		//if (!strcmp((*(*sintomi).arraySintomi[i]).sintomo, sintomoRicevuto)) { 
 		if ((*(*sintomi).arraySintomi[i]).sintomo == sintomoRicevuto) {
-			*reparto = (*(*sintomi).arraySintomi[i]).reparto;
-			*gravita = (*(*sintomi).arraySintomi[i]).gravita;
+			*reparto = (*(*sintomi).arraySintomi[i]).reparto; // inizializzo reparto corrispondente al sintomo
+			*gravita = (*(*sintomi).arraySintomi[i]).gravita; // inizializzo gravita corrispondente al sintomo
 			break;
 		}
 	}

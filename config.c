@@ -1,6 +1,7 @@
 #include "hospital.h"
 #include "config.h"
 
+// controlla se esiste il file di configurazione hospital.conf e richiama il parser per applicare le conf
 void loadConfig(int* numPazienti, int* numReparti, int* maxTempo){
     char* confData;
     if ( fileGetData("hospital.conf", &confData) ){
@@ -11,7 +12,7 @@ void loadConfig(int* numPazienti, int* numReparti, int* maxTempo){
     }
 }
 
-
+// parsifica il contenuto delle configurazioni, cercando su ogni riga il nome della varibaile da inizializzare e il valore da assegnargli
 void parseConfig(char* data, int* numPazienti, int* numReparti, int* maxTempo){
     char* line;
     while ( (line = strsep(&data, "\n")) ) { // per ogni riga del file...
@@ -43,39 +44,6 @@ void parseConfig(char* data, int* numPazienti, int* numReparti, int* maxTempo){
     }
 }
 
-bool verifyRangeConfig(char* name, int num, int min, int max) {
-    if (num >= min && num <= max)
-        return true;
-    else {
-        printf("Valore '%s' invalido, applico default\n", name);
-        return false;
-    }
-}
-
-// ottiene una sottostringa delimitata da spazi o tab
-char* getNextLexeme(char** string) {
-    char* lexeme;
-    while ( (lexeme = strsep(string, " \t")) ) {
-        //termino quando ho trovato l'inizio di una sottostringa oppure ho finito la stringa
-        if (*lexeme != '\0' || **string == '\0')
-            break;
-    }
-    return lexeme;
-}
-
-
-// ottiene la lunghezza del file in byte
-size_t fileLen(FILE *fp){
-    size_t fileSize = -1;
-    if (fp){
-        fseek(fp, 0, SEEK_END);
-        fileSize = ftell(fp);
-        fseek(fp, 0, SEEK_SET);
-    }
-    return fileSize;
-}
-
-
 // crea una malloc con il contenuto del file terminato da NULL
 bool fileGetData(char* fileName, char** data){
     bool success = false;
@@ -92,8 +60,44 @@ bool fileGetData(char* fileName, char** data){
 }
 
 
+// ottiene una sottostringa delimitata da spazi o tab
+char* getNextLexeme(char** string) {
+    char* lexeme;
+    while ( (lexeme = strsep(string, " \t")) ) {
+        //termino quando ho trovato l'inizio di una sottostringa oppure ho finito la stringa
+        if (*lexeme != '\0' || **string == '\0')
+            break;
+    }
+    return lexeme;
+}
+
+
+// verifica che il numero sia compreso tra due valori
+bool verifyRangeConfig(char* name, int num, int min, int max) {
+    if (num >= min && num <= max)
+        return true;
+    else {
+        printf("Valore '%s' invalido, applico default\n", name);
+        return false;
+    }
+}
+
+
+// ottiene la lunghezza del file in byte
+size_t fileLen(FILE *fp){
+    size_t fileSize = -1;
+    if (fp){
+        fseek(fp, 0, SEEK_END); // si sposta alla fine del file
+        fileSize = ftell(fp); // ritorna la distanza dall'inizio
+        fseek(fp, 0, SEEK_SET); // torna all'inizio
+    }
+    return fileSize;
+}
+
+
+// verifica che una stringa sia la rappresentazione di un intero
 bool isInt(char* c){
-    if (*c == '-' || *c == '+')
+    if (*c == '-' || *c == '+') // accetta numeri preceduti da + o -
         c++;
     do {
         if (!isdigit(*c++))
@@ -101,6 +105,5 @@ bool isInt(char* c){
     } while (*c);
     return true;
 }
-
 
 

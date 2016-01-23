@@ -11,28 +11,9 @@
 #define KEY_SEM_PAZIENTI 0xfaceb00c
 #define KEY_MSG_GP2TRI   0x000caffe
 
+
 bool OSPEDALE_APERTO = true;
-void sigquit_handler(int signum){
-    if (signum == SIGQUIT){
-        OSPEDALE_APERTO = false;
-    }
-}
-
 bool OSPEDALE_IN_CHIUSURA = false;
-void sigalarm_handler(int signum){
-    if (signum == SIGALRM){
-        OSPEDALE_IN_CHIUSURA = true;
-    }
-}
-
-void sigalarm_handler_propagate(int signum){
-    if (signum == SIGALRM){
-        printf("[Hospital] tempo scaduto, chiudo l'ospedale\n");
-        if (signal(SIGALRM, sigalarm_handler) == SIG_ERR) 
-            printf("signal (SIGALARM) error");
-        kill(-getpid(), SIGALRM);
-    }
-}
 
 
 int main(int argc, char* argv[]){
@@ -59,6 +40,8 @@ int main(int argc, char* argv[]){
     //creazione e inizializzazione semaforo numero massimo pazienti
     int semIDnumPazienti = createSem(KEY_SEM_PAZIENTI, 1);
     initSem(semIDnumPazienti, 0, numPazienti);
+
+
     //creazione coda di messaggi da generatore pazienti verso triage
     int msgqIDgp2tri = createMsgQ(KEY_MSG_GP2TRI, false);
 
@@ -103,12 +86,11 @@ int main(int argc, char* argv[]){
 
 
     printf("[Hospital] ** ATTENDO FIGLI **\n");
-    // aspetto che muoiano tutti i figli prima di liberare le risorse
-    waitAllChild();
+    waitAllChild(); // aspetto che muoiano tutti i figli prima di liberare le risorse
     printf("[Hospital] ** CHIUDO **\n");
 
 
-    // libero memoria sintomi 
+    // libero memoria elenco sintomi 
     int i;
     for (i=0; i<(*sintomi).numSintomi; i++) {
         free((*(*sintomi).arraySintomi[i]).sintomo);
@@ -117,9 +99,33 @@ int main(int argc, char* argv[]){
     free((*sintomi).arraySintomi);
     free(sintomi);
 
-    // distruggo coda fra pazienti e triage e semaforo
+    // distruggo coda fra pazienti e triage 
     destroyMsgQ(msgqIDgp2tri);
+    // distruggo semaforo pazienti
     destroySem(semIDnumPazienti);
+}
+
+
+void sigquit_handler(int signum){
+    if (signum == SIGQUIT){
+        OSPEDALE_APERTO = false;
+    }
+}
+
+
+void sigalarm_handler(int signum){
+    if (signum == SIGALRM){
+        OSPEDALE_IN_CHIUSURA = true;
+    }
+}
+
+void sigalarm_handler_propagate(int signum){
+    if (signum == SIGALRM){
+        printf("[Hospital] tempo scaduto, chiudo l'ospedale\n");
+        if (signal(SIGALRM, sigalarm_handler) == SIG_ERR) 
+            printf("signal (SIGALARM) error");
+        kill(-getpid(), SIGALRM);
+    }
 }
 
 
