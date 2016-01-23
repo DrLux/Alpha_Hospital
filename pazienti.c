@@ -3,9 +3,15 @@
 #include "comm.h"
 #include "pazienti.h"
 
+#ifdef PRINT_COLOR
+#define PAZIENTI_NAME ANSI_COLOR_YELLOW "Pazienti" ANSI_COLOR_RESET 
+#else
+#define PAZIENTI_NAME "Pazienti"
+#endif
+
 // genera messaggi relativi ai pazienti verso il triage
 void generaPazienti(int semIDPazienti, int msgqIDTriage, struct elencoSintomi* sintomi){
-	printf("PAZIENTI AVVIATO\n");
+	printf("["PAZIENTI_NAME"] AVVIATO\n");
 
 
 	struct cliente persona;
@@ -18,13 +24,13 @@ void generaPazienti(int semIDPazienti, int msgqIDTriage, struct elencoSintomi* s
 		if (OSPEDALE_APERTO && !OSPEDALE_IN_CHIUSURA) {
 
 			persona.sintomo = getSintomoRandom(sintomi); // ottiene sintomo random e lo inizializza nel nuovo cliente
-			printf("[Paziente %ld] %s\n", i, persona.sintomo); // PRINT INFO
+			printf("["PAZIENTI_NAME"] Genero paziente %ld con sintomo: %s\n", i, persona.sintomo); // PRINT INFO
 			sendMessage(msgqIDTriage, &persona, sizeof(persona)); // invia al triage il nuovo cliente
 			i++;
 		}
 	}
 
-	printf("[Pazienti] ** CHIUDO **\n");
+	printf("["PAZIENTI_NAME"] ** CHIUDO **\n");
 
 }
 

@@ -12,11 +12,19 @@
 #define KEY_MSG_GP2TRI   0x000caffe
 
 
+#ifdef PRINT_COLOR
+#define HOSPITAL_NAME ANSI_COLOR_BLUE "Hospital" ANSI_COLOR_RESET
+#else
+#define HOSPITAL_NAME "Hospital"
+#endif
+
 bool OSPEDALE_APERTO = true;
 bool OSPEDALE_IN_CHIUSURA = false;
 
 
 int main(int argc, char* argv[]){
+
+    printf("["HOSPITAL_NAME"] AVVIATO\n");
 
     srand(getpid());
     //setbuf(stdout, NULL);
@@ -27,9 +35,9 @@ int main(int argc, char* argv[]){
     maxTempo = DEFAULT_TEMPO;
     // reinizializzazione delle variabili dal file di configurazione
     loadConfig(&numPazienti, &numReparti, &maxTempo);
-    printf("Pazienti: %d\n", numPazienti);
-    printf("Reparti: %d\n", numReparti);
-    printf("Tempo: %d\n", maxTempo);
+    printf("["HOSPITAL_NAME"] Pazienti: %d\n", numPazienti);
+    printf("["HOSPITAL_NAME"] Reparti: %d\n", numReparti);
+    printf("["HOSPITAL_NAME"] Tempo: %d\n", maxTempo);
 
     
     // creazione elenco "sintomi <--> reparto <--> gravita"
@@ -85,9 +93,9 @@ int main(int argc, char* argv[]){
     }
 
 
-    printf("[Hospital] ** ATTENDO FIGLI **\n");
+    printf("["HOSPITAL_NAME"] ** ATTENDO FIGLI **\n");
     waitAllChild(); // aspetto che muoiano tutti i figli prima di liberare le risorse
-    printf("[Hospital] ** CHIUDO **\n");
+    printf("["HOSPITAL_NAME"] ** CHIUDO **\n");
 
 
     // libero memoria elenco sintomi 
@@ -121,7 +129,7 @@ void sigalarm_handler(int signum){
 
 void sigalarm_handler_propagate(int signum){
     if (signum == SIGALRM){
-        printf("[Hospital] tempo scaduto, chiudo l'ospedale\n");
+        printf("["HOSPITAL_NAME"] tempo scaduto, chiudo l'ospedale\n");
         if (signal(SIGALRM, sigalarm_handler) == SIG_ERR) 
             printf("signal (SIGALARM) error");
         kill(-getpid(), SIGALRM);

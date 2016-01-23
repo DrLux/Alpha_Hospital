@@ -6,8 +6,15 @@
 #define FIFO_BASE_NAME "fifo\0"
 
 
+#ifdef PRINT_COLOR
+#define TRIAGE_NAME ANSI_COLOR_RED "Pazienti" ANSI_COLOR_RESET
+#else
+#define TRIAGE_NAME "Pazienti"
+#endif
+
 void triage(int semIDPazienti, int msgqPazienti, int reparti, struct elencoSintomi* sintomi){
-	printf("TRIAGE AVVIATO\n");
+	//printf("TRIAGE AVVIATO\n");
+	printf("["TRIAGE_NAME"] AVVIATO\n");
 
 	// creo array che conterra' i puntatori ai file aperti per ogni reparto
 	int* fifoIDReparti = (int*) malloc(reparti*sizeof(int)); 
@@ -44,7 +51,7 @@ void triage(int semIDPazienti, int msgqPazienti, int reparti, struct elencoSinto
 			int reparto, gravita;
 			getRepartoGravita(sintomi, sintomoRicevuto, &reparto, &gravita);// associo il sintomo al reparto e alla gravita corrispondente
 			// PRINT INFO
-			printf("[Triage] Paziente: %ld, Sintomo: %s, Reparto: %d, Gravita': %d\n", idPaziente, sintomoRicevuto, reparto, gravita);
+			printf("["TRIAGE_NAME"] Paziente: %ld, Sintomo: %s, Reparto: %d, Gravita': %d\n", idPaziente, sintomoRicevuto, reparto, gravita);
 
 
 			if (reparto <= reparti){ // se il reparto esiste invio il paziente
@@ -54,7 +61,7 @@ void triage(int semIDPazienti, int msgqPazienti, int reparti, struct elencoSinto
 				// invio sul fifo del reparto corrispondente il nuovo paziente
 				write(fifoIDReparti[reparto-1], &nuovoPaziente, sizeof(struct paziente));
 			} else { // se il reparto NON esiste NON servo il paziente
-				printf("[Triage] Reparto: %d inesistente! NON servo il paziente %ld\n", reparto, idPaziente);
+				printf("["TRIAGE_NAME"] Reparto: %d inesistente! NON servo il paziente %ld\n", reparto, idPaziente);
 				// incremento semaforo pazienti
 				semRelease(semIDPazienti, 0);
 			}
@@ -62,9 +69,9 @@ void triage(int semIDPazienti, int msgqPazienti, int reparti, struct elencoSinto
 		}
 	}
 
-	printf("[Triage] ** ATTENDO FIGLI **\n");
+	printf("["TRIAGE_NAME"] ** ATTENDO FIGLI **\n");
 	waitAllChild(); // aspetto che muoiano tutti i figli prima di liberare le risorse
-	printf("[Triage] ** CHIUDO **\n");
+	printf("["TRIAGE_NAME"] ** CHIUDO **\n");
 
 
 	// pulisco memoria e fifo
