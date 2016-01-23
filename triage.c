@@ -7,9 +7,9 @@
 
 
 #ifdef PRINT_COLOR
-#define TRIAGE_NAME ANSI_COLOR_RED "Pazienti" ANSI_COLOR_RESET
+#define TRIAGE_NAME ANSI_COLOR_RED "Triage" ANSI_COLOR_RESET
 #else
-#define TRIAGE_NAME "Pazienti"
+#define TRIAGE_NAME "Triage"
 #endif
 
 void triage(int semIDPazienti, int msgqPazienti, int reparti, struct elencoSintomi* sintomi){
