@@ -12,10 +12,8 @@ void generaPazienti(int semPazienti, int msgqIDgp2tri, struct elencoSintomi* sin
 	persona.mtype = 1;
 
 	int i=0;
-	//while(OSPEDALE_APERTO){
 	while(OSPEDALE_APERTO && !OSPEDALE_IN_CHIUSURA){
 		semReserve(semPazienti, 0); // decremento il semaforo dei pazienti
-		//if (OSPEDALE_APERTO) {
 		if (OSPEDALE_APERTO && !OSPEDALE_IN_CHIUSURA) {
 
 			persona.sintomo = getSintomoRandom(sintomi);

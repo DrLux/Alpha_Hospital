@@ -67,28 +67,6 @@ int semGetVal(int semid, int semnum){
     int res;
     if((res = semctl(semid, semnum, GETVAL, 0)) < 0){
         printf("Error semGetVal (%d)\n", errno);
-
-        switch (errno){
-            /*case EACCESS:
-                printf("EACCESS (permission denied)\n"); 
-                break;*/
-            case EFAULT:
-                printf("EFAULT (invalid address pointed to by arg argument)\n");
-                break;
-            case EIDRM:
-                printf("EIDRM (semaphore set was removed)\n");
-                break;
-            case EINVAL:
-                printf("EINVAL (set doesn't exist, or semid is invalid)\n");
-                break;
-            case EPERM:
-                printf("EPERM (EUID has no privileges for cmd in arg)\n");
-                break;
-            case ERANGE:
-                printf("ERANGE (semaphore value out of range)\n");
-                break;                 
-        }
-
         exit(EXIT_FAILURE);
     }
     return res;
@@ -123,7 +101,7 @@ void destroyMsgQ(int msgqid){
 
 // Scrivo messaggi in coda
 void sendMessage(int msgid, void *msg, int msgSize) {
-    if (msgsnd(msgid, msg, msgSize - sizeof(long), 0) == -1){ // METTERLA NO WAIT E TORNARE TRUE SE MANDATO, FALSE SE NON MANDATO (CODA PIENA)
+    if (msgsnd(msgid, msg, msgSize - sizeof(long), 0) == -1){ 
         if (errno != EINTR) {
             printf("Error msgsnd (%d)\n", errno);    
             exit(EXIT_FAILURE);
@@ -145,16 +123,6 @@ bool recvMessage(int msgid, void *msg, int msgSize, long msgtype) {
     return true;
 }
 
-/*
-void getInfo(int qid, struct msqid_ds *queue_ds){
-    printf("[info] ID CODA: %d\n", qid);
-    if (msgctl(qid, IPC_STAT, queue_ds ) == -1 ) { 
-        printf("msgctl error (%d)\n", errno);
-        exit(EXIT_FAILURE);
-    }
-    printf("Num of messages in queue: %d\n", (int) (*queue_ds).msg_qnum);
-}
-*/
 
 void waitAllChild(){
     while (waitpid(-1, NULL, 0)) {
@@ -165,13 +133,15 @@ void waitAllChild(){
 }
 
 
-// genera un numero casuale entro un range
-int getRand(int min, int max){
-    int casuale;
-    do{
-        casuale = rand()%10;
-    }while(casuale < min || casuale > max); 
-    return casuale;
-
+int getRand(int min_num, int max_num){
+    int low_num=0, hi_num=0;
+    if (min_num<max_num) {
+        low_num=min_num;
+        hi_num=max_num+1; // +1 per includere il max 
+    } else {
+        low_num=max_num+1; // +1 per includere il max
+        hi_num=min_num;
+    }
+    return (rand()%(hi_num-low_num))+low_num;
 }
 

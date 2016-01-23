@@ -44,9 +44,3 @@ struct elencoSintomi {
 };
 
 
-//Handler che gestisce SigQuit e SigAlarm
-//static void chiusuraOspedale(int sig);
-
-//variabile globale che definisce se l' ospedale è aperto o chiuso
-//extern int GLOBAL_SWITCH;
-

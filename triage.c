@@ -68,7 +68,7 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 	printf("[Triage] ** CHIUDO **\n");
 
 
-	// pulisco memoria e code messaggi // DA RIFARE CON FIFO
+	// pulisco memoria e fifo
 	removeFifos(reparti, fifoIDReparti, fifoPathReparto);
 	free(fifoPathReparto);
 	free(fifoIDReparti);

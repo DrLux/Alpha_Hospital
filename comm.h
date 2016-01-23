@@ -27,5 +27,5 @@ void sendMessage(int msgid, void *msg, int msgSize);
 bool recvMessage(int msgid, void *msg, int msgSize, long msgtype);
 
 void waitAllChild();
-int getRand(int min, int max);
+int getRand(int min_num, int max_num);
 
