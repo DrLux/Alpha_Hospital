@@ -6,7 +6,7 @@ else
 endif
 
 CFLAGS=-c -Wall -pedantic -std=$(CVERS)
-LDFLAGS=
+LDFLAGS=-lm
 CC=gcc
 SOURCES=$(wildcard *.c)
 OBJECTS=$(SOURCES:.c=.o)

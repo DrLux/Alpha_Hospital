@@ -1,13 +1,12 @@
 #include "hospital.h"
 #include "comm.h"
 #include "triage.h"
-#include <math.h>
 
 #define FIFO_PATH_FOLDER "fifos\0"
 #define FIFO_BASE_NAME "fifo\0"
 
 
-void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi* sintomi){
+void triage(int semIDPazienti, int msgqPazienti, int reparti, struct elencoSintomi* sintomi){
 	printf("TRIAGE AVVIATO\n");
 
 	// creo array che conterra' i puntatori ai file aperti per ogni reparto
@@ -23,7 +22,7 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 	// generazione reparti e relative code messaggi
 	bool isChild = createChildsWithFifo(reparti, fifoIDReparti, fifoPathReparto, &IDReparto);
 	if (isChild) { // routine reparti
-		reparto(fifoPathReparto, IDReparto, semPazienti);
+		reparto(fifoPathReparto, IDReparto, semIDPazienti);
 		// exit del figlio
 		exit(EXIT_SUCCESS);
 	}
@@ -57,7 +56,7 @@ void triage(int semPazienti, int msgqPazienti, int reparti, struct elencoSintomi
 			} else { // se il reparto NON esiste NON servo il paziente
 				printf("[Triage] Reparto: %d inesistente! NON servo il paziente %ld\n", reparto, idPaziente);
 				// incremento semaforo pazienti
-				semRelease(semPazienti, 0);
+				semRelease(semIDPazienti, 0);
 			}
 			
 		}

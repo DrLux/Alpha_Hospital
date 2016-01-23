@@ -43,7 +43,7 @@ int main(int argc, char* argv[]){
 
 
     //creazione coda di messaggi da generatore pazienti verso triage
-    int msgqIDgp2tri = createMsgQ(KEY_MSG_GP2TRI, false);
+    int msgqIDPazienti2Triage = createMsgQ(KEY_MSG_GP2TRI, false);
 
 
     // settaggio handler SIGQUIT e SIGALRM (le "ereditano" tutti i figli)
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]){
     //creo il triage
     pid_t pidTriage = fork();
     if (!pidTriage) {
-        triage(semIDnumPazienti, msgqIDgp2tri, numReparti, sintomi);
+        triage(semIDnumPazienti, msgqIDPazienti2Triage, numReparti, sintomi);
         //chiamata a main triage
         exit(EXIT_SUCCESS);
     }
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]){
     //creo il generatore di pazienti
     pid_t pidGenPaz = fork();
     if (!pidGenPaz) {
-        generaPazienti(semIDnumPazienti, msgqIDgp2tri, sintomi);
+        generaPazienti(semIDnumPazienti, msgqIDPazienti2Triage, sintomi);
         exit(EXIT_SUCCESS);
     }
 
@@ -100,7 +100,7 @@ int main(int argc, char* argv[]){
     free(sintomi);
 
     // distruggo coda fra pazienti e triage 
-    destroyMsgQ(msgqIDgp2tri);
+    destroyMsgQ(msgqIDPazienti2Triage);
     // distruggo semaforo pazienti
     destroySem(semIDnumPazienti);
 }
