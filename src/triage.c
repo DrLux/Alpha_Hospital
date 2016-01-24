@@ -13,8 +13,8 @@
 #endif
 
 void triage(int semIDPazienti, int msgqPazienti, int reparti, struct elencoSintomi* sintomi){
-	//printf("TRIAGE AVVIATO\n");
-	printf("["TRIAGE_NAME"] AVVIATO\n");
+	//puts("TRIAGE AVVIATO");
+	puts("["TRIAGE_NAME"] AVVIATO");
 
 	// creo array che conterra' i puntatori ai file aperti per ogni reparto
 	int* fifoIDReparti = (int*) malloc(reparti*sizeof(int)); 
@@ -69,9 +69,9 @@ void triage(int semIDPazienti, int msgqPazienti, int reparti, struct elencoSinto
 		}
 	}
 
-	printf("["TRIAGE_NAME"] ** ATTENDO FIGLI **\n");
+	puts("["TRIAGE_NAME"] ** ATTENDO FIGLI **");
 	waitAllChild(); // aspetto che muoiano tutti i figli prima di liberare le risorse
-	printf("["TRIAGE_NAME"] ** CHIUDO **\n");
+	puts("["TRIAGE_NAME"] ** CHIUDO **");
 
 
 	// pulisco memoria e fifo

@@ -14,7 +14,7 @@ void loadConfig(int* numPazienti, int* numReparti, int* maxTempo, char* basePath
         parseConfig(confData, numPazienti, numReparti, maxTempo);
         free(confData);
     } else {
-        printf("[ERRORE] hospital.conf non trovato! Applico le configurazioni di default\n");
+        puts("[ERRORE] hospital.conf non trovato! Applico le configurazioni di default");
     }
     free(confPath);
 }
