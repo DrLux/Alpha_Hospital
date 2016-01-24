@@ -38,7 +38,7 @@ struct cliente {
 
 // struct usata tra triage --> reparto e reparti --> prestazioni
 struct paziente {
-    long mtype; // usato come indice priorita nelle prestazioni 
+    long turno; // usato come indice priorita nelle prestazioni 
     unsigned long ID; // Identificativo paziente
     int gravita;
     char* sintomo; // puntatore a nome sintomo

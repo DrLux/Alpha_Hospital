@@ -21,10 +21,10 @@ void prestazione(int msgqIDReparto, int IDPrestazione, int semIDPazienti){
 	while(OSPEDALE_APERTO){
 		if (starvation > 9){ // se c'e' qualche paziente che sta attendendo piu di 10 prestazioni, prendo quello entrato meno di recente
 			printf("["PRESTAZ_NAME" %d] Prendo primo in coda (gestione starvation)\n", IDPrestazione);
-			priority = 0; // mtype a 0 per prelevare il primo (come fosse una coda FIFO)
+			priority = 0; // mtype (turno) a 0 per prelevare il primo (come fosse una coda FIFO)
 			starvation = 0; // resetto il contatore delle prestazioni effettuate
 		} else {
-			priority = -11; // prelevo in ordine di mtype piu' basso
+			priority = -11; // prelevo in ordine di mtype (turno) piu' basso
 		}
 
 		// prelevo un paziente dalla coda del reparto

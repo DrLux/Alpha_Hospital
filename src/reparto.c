@@ -33,7 +33,7 @@ void reparto(char* fifoPathTriage, int IDReparto, int semIDPazienti){
 	while (OSPEDALE_APERTO) { 
 		// prelevo un paziente dal FIFO del triage
 		if(read(fifoIDTriage, &pazienteDaServire, sizeof(struct paziente)) > 0){
-			pazienteDaServire.mtype = (long) 11-pazienteDaServire.gravita; // assegno turno (ribalto la gravita per inserire correttamente la priorita dei pazienti nella coda)
+			pazienteDaServire.turno = (long) 11-pazienteDaServire.gravita; // assegno turno (ribalto la gravita per inserire correttamente la priorita dei pazienti nella coda)
 			// PRINT INFO
 			printf("["REPARTO_NAME" %d] Paziente: %ld, Sintomo: %s, Gravita: %d\n", IDReparto, pazienteDaServire.ID, pazienteDaServire.sintomo, pazienteDaServire.gravita);
 			sendMessage(msgqIDPrestazione, &pazienteDaServire, sizeof(pazienteDaServire));// invio alla prestazione il cliente da operare
