@@ -19,12 +19,6 @@ void loadConfig(int* numPazienti, int* numReparti, int* maxTempo, char* basePath
     free(confPath);
 }
 
-char* makePath(char* basePath, char* fileName){
-    char* path = (char*) malloc( ( strlen(basePath) + 1 + strlen(fileName) + 1 ) * sizeof(char) ); // conf/file.conf\0
-    sprintf(path, "%s/%s", basePath, fileName);
-    return path;
-}
-
 
 // parsifica il contenuto delle configurazioni, cercando su ogni riga il nome della varibaile da inizializzare e il valore da assegnargli
 void parseConfig(char* data, int* numPazienti, int* numReparti, int* maxTempo){
@@ -83,6 +77,13 @@ char* getNextLexeme(char** string) {
             break;
     }
     return lexeme;
+}
+
+// concatena due stringhe separate da / in una nuova stringa e ne ritorna il puntatore
+char* makePath(char* basePath, char* fileName){
+    char* path = (char*) malloc( ( strlen(basePath) + 1 + strlen(fileName) + 1 ) * sizeof(char) ); // conf/file.conf\0
+    sprintf(path, "%s/%s", basePath, fileName);
+    return path;
 }
 
 

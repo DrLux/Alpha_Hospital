@@ -75,7 +75,6 @@ int main(int argc, char* argv[]){
         printf("signal (SIGALARM) error");
 
 
-
     //creo il triage
     pid_t pidTriage = fork();
     if (!pidTriage) {
@@ -146,8 +145,11 @@ void sigalarm_handler_propagate(int signum){
         printf("["HOSPITAL_NAME"] tempo scaduto, chiudo l'ospedale\n");
         if (signal(SIGALRM, sigalarm_handler) == SIG_ERR) 
             printf("signal (SIGALARM) error");
-        kill(-getpid(), SIGALRM);
+        if(killpg(getpgrp(), SIGALRM) == -1)
+            printf("\nkillpg (SIGALRM) error %d\n", errno);
     }
 }
+
+
 
 
