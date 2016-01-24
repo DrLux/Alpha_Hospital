@@ -13,7 +13,7 @@ rangeRestrict    -> se num e' maggiore di max, torna max; se num e' minore di mi
 
 
 void generaPazienti(int semIDPazienti, int msgqIDTriage, struct elencoSintomi* sintomi);
-void loadSintomi(struct elencoSintomi** sintomi);
+void loadSintomi(struct elencoSintomi** sintomi, char* basePathConf);
 void parseSintomi(char* data, struct elencoSintomi** sintomi);
 char* getSintomoRandom(struct elencoSintomi* sintomi);
 int countLine(char *path);

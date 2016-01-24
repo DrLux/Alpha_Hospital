@@ -15,12 +15,17 @@ isInt             -> verifica che la stringa passata sia un numero, anche preced
 */
 
 
-void loadConfig(int* numPazienti, int* numReparti, int* maxTime);
+void loadConfig(int* numPazienti, int* numReparti, int* maxTempo, char* basePathConf);
+char* makePath(char* basePath, char* fileName);
 void parseConfig(char* data, int* numPazienti, int* numReparti, int* maxTempo);
 bool fileGetData(char* fileName, char** data);
 char* getNextLexeme(char** string);
 bool verifyRangeConfig(char* name, int num, int min, int max);
 size_t fileLen(FILE *fp);
 bool isInt(char* c);
+
+#define DEFAULT_CONF_DIR "."
+#define HOSPITAL_CONF "hospital.conf"
+#define SINTOMI_CONF "sintomi.conf"
 
 

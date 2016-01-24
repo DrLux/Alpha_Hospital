@@ -35,15 +35,22 @@ void generaPazienti(int semIDPazienti, int msgqIDTriage, struct elencoSintomi* s
 }
 
 // carica i sintomi da file in memoria
-void loadSintomi(struct elencoSintomi** sintomi){
+void loadSintomi(struct elencoSintomi** sintomi, char* basePathConf){
+	char* sintomiPath;
+	if (basePathConf!=NULL)
+		sintomiPath = makePath(basePathConf, SINTOMI_CONF);
+	else
+		sintomiPath = makePath(DEFAULT_CONF_DIR, SINTOMI_CONF);
+
     char* sintomiData;
-    if ( fileGetData("sintomi.conf", &sintomiData) ){
+    if ( fileGetData(sintomiPath, &sintomiData) ){
         parseSintomi(sintomiData, sintomi);
         free(sintomiData);
     } else {
-        printf("sintomi.conf non trovato! Termino\n");
+        printf("[ERRORE] sintomi.conf non trovato! Termino\n");
         exit(EXIT_FAILURE);
     }
+    free(sintomiPath);
 }
 
 

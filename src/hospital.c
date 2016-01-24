@@ -24,7 +24,21 @@ bool OSPEDALE_IN_CHIUSURA = false;
 
 int main(int argc, char* argv[]){
 
-    printf("["HOSPITAL_NAME"] AVVIATO\n");
+
+    char* basePathConf = NULL;
+    if (argc > 1) {
+        if (!strcmp(argv[1], "help")){
+            printf("\nUsage: %s [path]\n", argv[0]);
+            printf("[path]: path cartella contentente le conf\n");
+            printf("\t(Se nessun path e' specificato, le conf verranno cercate nella cartella attuale)\n\n");
+            exit(EXIT_SUCCESS);
+        } else {
+            basePathConf = argv[1];
+        }
+    } 
+
+
+    printf("\n["HOSPITAL_NAME"] AVVIATO\n");
 
     srand(getpid());
     //setbuf(stdout, NULL);
@@ -34,7 +48,7 @@ int main(int argc, char* argv[]){
     numReparti = DEFAULT_REPARTI,
     maxTempo = DEFAULT_TEMPO;
     // reinizializzazione delle variabili dal file di configurazione
-    loadConfig(&numPazienti, &numReparti, &maxTempo);
+    loadConfig(&numPazienti, &numReparti, &maxTempo, basePathConf);
     printf("["HOSPITAL_NAME"] Pazienti: %d\n", numPazienti);
     printf("["HOSPITAL_NAME"] Reparti: %d\n", numReparti);
     printf("["HOSPITAL_NAME"] Tempo: %d\n", maxTempo);
@@ -42,7 +56,7 @@ int main(int argc, char* argv[]){
     
     // creazione elenco "sintomi <--> reparto <--> gravita"
     struct elencoSintomi* sintomi = NULL;
-    loadSintomi(&sintomi);
+    loadSintomi(&sintomi, basePathConf);
 
 
     //creazione e inizializzazione semaforo numero massimo pazienti
@@ -95,7 +109,7 @@ int main(int argc, char* argv[]){
 
     printf("["HOSPITAL_NAME"] ** ATTENDO FIGLI **\n");
     waitAllChild(); // aspetto che muoiano tutti i figli prima di liberare le risorse
-    printf("["HOSPITAL_NAME"] ** CHIUDO **\n");
+    printf("["HOSPITAL_NAME"] ** CHIUDO **\n\n");
 
 
     // libero memoria elenco sintomi 

@@ -2,15 +2,29 @@
 #include "config.h"
 
 // controlla se esiste il file di configurazione hospital.conf e richiama il parser per applicare le conf
-void loadConfig(int* numPazienti, int* numReparti, int* maxTempo){
+void loadConfig(int* numPazienti, int* numReparti, int* maxTempo, char* basePathConf){
+    char* confPath;
+    if (basePathConf!=NULL)
+        confPath = makePath(basePathConf, HOSPITAL_CONF);
+    else
+        confPath = makePath(DEFAULT_CONF_DIR, HOSPITAL_CONF);
+
     char* confData;
-    if ( fileGetData("hospital.conf", &confData) ){
+    if ( fileGetData(confPath, &confData) ){
         parseConfig(confData, numPazienti, numReparti, maxTempo);
         free(confData);
     } else {
-        printf("hospital.conf non trovato! Applico le configurazioni di default\n");
+        printf("[ERRORE] hospital.conf non trovato! Applico le configurazioni di default\n");
     }
+    free(confPath);
 }
+
+char* makePath(char* basePath, char* fileName){
+    char* path = (char*) malloc( ( strlen(basePath) + 1 + strlen(fileName) + 1 ) * sizeof(char) ); // conf/file.conf\0
+    sprintf(path, "%s/%s", basePath, fileName);
+    return path;
+}
+
 
 // parsifica il contenuto delle configurazioni, cercando su ogni riga il nome della varibaile da inizializzare e il valore da assegnargli
 void parseConfig(char* data, int* numPazienti, int* numReparti, int* maxTempo){

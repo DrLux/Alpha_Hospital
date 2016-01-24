@@ -5,5 +5,4 @@ Hospital-OS
 make
 
 ### Run
-cd bin
-./hospital
+./launch.sh
