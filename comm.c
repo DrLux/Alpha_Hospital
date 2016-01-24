@@ -139,15 +139,15 @@ void waitAllChild(){
 
 
 // genera un numero random compreso tra min_num e max_num (compresi)
-int getRand(int min_num, int max_num){
-    int low_num=0, hi_num=0;
-    if (min_num<max_num) {
-        low_num=min_num;
-        hi_num=max_num+1; // +1 per includere il max 
+int getRand(int minNum, int maxNum){
+    int lowNum = 0, hiNum = 0;
+    if (minNum<maxNum) {
+        lowNum = minNum;
+        hiNum = maxNum + 1; // +1 per includere il max 
     } else {
-        low_num=max_num+1; // +1 per includere il max
-        hi_num=min_num;
+        lowNum = maxNum + 1; // +1 per includere il max
+        hiNum = minNum;
     }
-    return (rand()%(hi_num-low_num))+low_num;
+    return (rand()%(hiNum-lowNum))+lowNum;
 }
 
