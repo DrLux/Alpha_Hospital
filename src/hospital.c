@@ -29,8 +29,8 @@ int main(int argc, char* argv[]){
     if (argc > 1) {
         if (!strcmp(argv[1], "help")){
             printf("\nUsage: %s [path]\n", argv[0]);
-            printf("[path]: path cartella contentente le conf\n");
-            printf("\t(Se nessun path e' specificato, le conf verranno cercate nella cartella attuale)\n\n");
+            puts("[path]: path cartella contentente le conf");
+            puts("\t(Se nessun path e' specificato, le conf verranno cercate nella cartella attuale)\n");
             exit(EXIT_SUCCESS);
         } else {
             basePathConf = argv[1];
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
     } 
 
 
-    printf("\n["HOSPITAL_NAME"] AVVIATO\n");
+    puts("\n["HOSPITAL_NAME"] AVVIATO");
 
     srand(getpid());
     //setbuf(stdout, NULL);
@@ -70,9 +70,9 @@ int main(int argc, char* argv[]){
 
     // settaggio handler SIGQUIT e SIGALRM (le "ereditano" tutti i figli)
     if (signal(SIGQUIT, sigquit_handler) == SIG_ERR) 
-        printf("signal (SIGQUIT) error");
+        fputs("signal (SIGQUIT) error\n", stderr);
     if (signal(SIGALRM, sigalarm_handler) == SIG_ERR) 
-        printf("signal (SIGALARM) error");
+        fputs("signal (SIGALARM) error\n", stderr);
 
 
     //creo il triage
@@ -93,7 +93,7 @@ int main(int argc, char* argv[]){
 
     // setto l'handler (solo per il padre) per propagare la SIGALRM ai figli
     if (signal(SIGALRM, sigalarm_handler_propagate) == SIG_ERR) 
-        printf("signal (SIGALARM) error");
+        fputs("signal (SIGALARM) error\n", stderr);
 
     
     //inizializzazione timer per la SIGALARM
@@ -106,9 +106,9 @@ int main(int argc, char* argv[]){
     }
 
 
-    printf("["HOSPITAL_NAME"] ** ATTENDO FIGLI **\n");
+    puts("["HOSPITAL_NAME"] ** ATTENDO FIGLI **");
     waitAllChild(); // aspetto che muoiano tutti i figli prima di liberare le risorse
-    printf("["HOSPITAL_NAME"] ** CHIUDO **\n\n");
+    puts("["HOSPITAL_NAME"] ** CHIUDO **\n");
 
 
     // libero memoria elenco sintomi 
@@ -142,11 +142,11 @@ void sigalarm_handler(int signum){
 
 void sigalarm_handler_propagate(int signum){
     if (signum == SIGALRM){
-        printf("["HOSPITAL_NAME"] tempo scaduto, chiudo l'ospedale\n");
+        puts("["HOSPITAL_NAME"] tempo scaduto, chiudo l'ospedale");
         if (signal(SIGALRM, sigalarm_handler) == SIG_ERR) 
-            printf("signal (SIGALARM) error");
+            fputs("signal (SIGALARM) error\n", stderr);
         if(killpg(getpgrp(), SIGALRM) == -1)
-            printf("\nkillpg (SIGALRM) error %d\n", errno);
+            fprintf(stderr, "\nkillpg (SIGALRM) error %d\n", errno);
     }
 }
 

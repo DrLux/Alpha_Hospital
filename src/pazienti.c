@@ -11,7 +11,7 @@
 
 // genera messaggi relativi ai pazienti verso il triage
 void generaPazienti(int semIDPazienti, int msgqIDTriage, struct elencoSintomi* sintomi){
-	printf("["PAZIENTI_NAME"] AVVIATO\n");
+	puts("["PAZIENTI_NAME"] AVVIATO");
 
 
 	struct cliente persona;
@@ -30,7 +30,7 @@ void generaPazienti(int semIDPazienti, int msgqIDTriage, struct elencoSintomi* s
 		}
 	}
 
-	printf("["PAZIENTI_NAME"] ** CHIUDO **\n");
+	puts("["PAZIENTI_NAME"] ** CHIUDO **");
 
 }
 
@@ -47,7 +47,7 @@ void loadSintomi(struct elencoSintomi** sintomi, char* basePathConf){
         parseSintomi(sintomiData, sintomi);
         free(sintomiData);
     } else {
-        printf("[ERRORE] sintomi.conf non trovato! Termino\n");
+        puts("[ERRORE] sintomi.conf non trovato! Termino");
         exit(EXIT_FAILURE);
     }
     free(sintomiPath);
